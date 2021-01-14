@@ -11,29 +11,11 @@
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    <!-- Credit to the Getting Started tutorial on Handsfree.js: https://handsfree.js.org/guide/misc/intro.html#getting-started -->
-    <!-- Import Handsfree.js in body (as it adds body classes) -->
     <!-- TODO: load the models locally using this guide: https://handsfree.js.org/#hosting-the-models-yourself -->
     <script src="https://unpkg.com/handsfree@8.1.1/build/lib/handsfree.js"></script>
 
-    <script>
-        // TODO: ask the user for permission to access the camera
-        // Use the hand tracking of Google MediaPipe and Handsfree.js
-        handsfree = new Handsfree({
-            showDebug: true,
-
-            // Use the hand model with custom config
-            hands: {
-                // Always make sure to enable them
-                enabled: true,
-
-                // Let's track up to 4 hands
-                maxNumHands: 4,
-            }
-        })
-        // start hand tracking    
-        handsfree.start();
-    </script>
+    <!-- JS to start hand tracking -->
+    <script src="./index.js"> </script>
 
 </body>
 </html>

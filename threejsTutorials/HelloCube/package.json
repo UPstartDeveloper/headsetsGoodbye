@@ -1,0 +1,7 @@
+{
+    "name": "hello-cube",
+    "version": "0.0.1",
+    "dependencies": {
+        "three": "^0.124.0"
+    }
+}

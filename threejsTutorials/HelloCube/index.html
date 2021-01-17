@@ -3,12 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Hello Three.js</title>
 </head>
 <body>
+    <!-- Canvas to Draw the Scene -->
+    <canvas id="c"></canvas>
+
     <!-- Let's Start by Importing Three.js -->
     <script type="module">
-        import * as THREE from './node_modules/three/build/three.module.js';
+        // import * as THREE from './node_modules/three/build/three.module.js';
+        import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+
+        // do the thing 
+        const main = () => {
+            // A: get the canvas element (what we'll be drawing upon)
+            const canvas = document.querySelector("#c");
+            // B: instaniate the renderer (to do the drawing)
+            const renderer = new THREE.WebGLRenderer({canvas});
+            // C: instantiate the camera
+            const fov = 75;  // fov = "field of view"
+            const aspect = 2;  // the canvas default
+            const near = 0.1;
+            const far = 5;
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+            // move the camera to look down on the box
+            camera.position.z = 2;
+            // D: instantiate a scene - anything we want to draw gets added to it
+            const scene = new THREE.Scene();
+            // E: add the geometry, material, and finally the mesh for the box
+            const boxWidth = 1;
+            const boxHeight = 1;
+            const boxDepth = 1;
+            const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+            // F: materials can set color using CSS
+            const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 });
+            const cube = new THREE.Mesh(geometry, material);
+            // G: add the box to the scene
+            scene.add(cube);
+            // H: now render the scene!
+            renderer.render(scene, camera);
+        }
+        main();
     </script>
 </body>
 </html>

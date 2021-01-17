@@ -35,24 +35,30 @@
             const boxHeight = 1;
             const boxDepth = 1;
             const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-            // F: materials can set color using CSS
-            const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 });
+            // F: add a directional light
+            const color = 0xFFFFFF;
+            const intensity = 1;
+            const light = new THREE.DirectionalLight(color, intensity);
+            light.position.set(-1, 2, 4);
+            scene.add(light);
+            // G: materials can set color using CSS
+            const material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });  // greenish-blue
             const cube = new THREE.Mesh(geometry, material);
-            // G: add the box to the scene
+            // H: add the box to the scene
             scene.add(cube);
-            // H: now render the scene!
+            // I: now render the scene!
             const render = time => {
                 // this function creates a "loop" - so we can
                 // see the cube in one orientation, change that orientation,
                 // and see the cube again in rapid succession to create 
                 // "movement"
                 time *= 0.001;  // convert time to seconds
-
+                // rotate the cube
                 cube.rotation.x = time;
                 cube.rotation.y = time;
-
+                // render it again
                 renderer.render(scene, camera);
-
+                // request another frame
                 requestAnimationFrame(render);
             }
             requestAnimationFrame(render);

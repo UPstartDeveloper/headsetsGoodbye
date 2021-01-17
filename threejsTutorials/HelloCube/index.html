@@ -7,7 +7,7 @@
 </head>
 <body>
     <!-- Canvas to Draw the Scene -->
-    <canvas id="c"></canvas>
+    <canvas id="c" height=400 width=600></canvas>
 
     <!-- Let's Start by Importing Three.js -->
     <script type="module">
@@ -41,7 +41,21 @@
             // G: add the box to the scene
             scene.add(cube);
             // H: now render the scene!
-            renderer.render(scene, camera);
+            const render = time => {
+                // this function creates a "loop" - so we can
+                // see the cube in one orientation, change that orientation,
+                // and see the cube again in rapid succession to create 
+                // "movement"
+                time *= 0.001;  // convert time to seconds
+
+                cube.rotation.x = time;
+                cube.rotation.y = time;
+
+                renderer.render(scene, camera);
+
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
         }
         main();
     </script>

@@ -30,22 +30,38 @@
             camera.position.z = 2;
             // D: instantiate a scene - anything we want to draw gets added to it
             const scene = new THREE.Scene();
-            // E: add the geometry, material, and finally the mesh for the box
+            // E: make the geometry for a box
             const boxWidth = 1;
             const boxHeight = 1;
             const boxDepth = 1;
             const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+            /* F: 
+             * this function abstracts the steps for making a box, w/ different
+             * materials and geometries
+             */
+            const makeInstance = (geometry, color, x) => {
+                // set color on the material (can just use CSS)
+                const material = new THREE.MeshPhongMaterial({ color });
+                // instantiate the box
+                const cube = new THREE.Mesh(geometry, material);
+                // add it to the scene, and set its x position
+                scene.add(cube);
+                cube.position.x = x;
+                // end the function by returning the box
+                return cube;
+            }
+            // G: add 3 different cubes
+            const cubes = [
+                makeInstance(geometry, 0x44aa88, -2),
+                makeInstance(geometry, 0xaa8844, 0),
+                makeInstance(geometry, 0x8844aa, 2),
+            ];
             // F: add a directional light
-            const color = 0xFFFFFF;
+            const color = 0xFFFFFF;  // just use white light for now
             const intensity = 1;
             const light = new THREE.DirectionalLight(color, intensity);
             light.position.set(-1, 2, 4);
             scene.add(light);
-            // G: materials can set color using CSS
-            const material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });  // greenish-blue
-            const cube = new THREE.Mesh(geometry, material);
-            // H: add the box to the scene
-            scene.add(cube);
             // I: now render the scene!
             const render = time => {
                 // this function creates a "loop" - so we can
@@ -53,9 +69,12 @@
                 // and see the cube again in rapid succession to create 
                 // "movement"
                 time *= 0.001;  // convert time to seconds
-                // rotate the cube
-                cube.rotation.x = time;
-                cube.rotation.y = time;
+                cubes.forEach((cube, ndx) => {
+                    const speed = 1 + ndx * .1;
+                    const rot = time * speed;
+                    cube.rotation.x = rot;
+                    cube.rotation.y = rot;
+                });
                 // render it again
                 renderer.render(scene, camera);
                 // request another frame

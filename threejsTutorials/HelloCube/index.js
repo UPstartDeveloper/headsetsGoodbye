@@ -1,13 +1,32 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 
+/* global Split */
+
+// This code is only related to handling the split.
+// Our three.js code has not changed
+Split(['#view', '#controls'], {  // eslint-disable-line new-cap
+  sizes: [75, 25],
+  minSize: 100,
+  elementStyle: (dimension, size, gutterSize) => {
+    return {
+      'flex-basis': `calc(${size}% - ${gutterSize}px)`,
+    };
+  },
+  gutterStyle: (dimension, gutterSize) => {
+    return {
+      'flex-basis': `${gutterSize}px`,
+    };
+  },
+});
 // resize the canvas to prevent poor resolution
 const resizeRendererToDisplaySize = renderer => {
-    // get the current dimensions of the canvas
-    const canvas = renderer.domElement;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    // determine if the canvas needs to be resized
+    // get the current dimensions of the canvas (on the HTML document)
+    // const canvas = renderer.domElement;
+    const view = document.querySelector("#view");
+    const width = view.clientWidth;
+    const height = view.clientHeight;
+    // determine if the canvas' (pixel area) needs to be resized
     const needResize = canvas.width !== width || canvas.height !== height;
     // resize the canvas to the same area as currently seen on the screen
     if (needResize) {

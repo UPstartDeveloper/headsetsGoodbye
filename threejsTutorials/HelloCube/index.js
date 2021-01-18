@@ -1,8 +1,22 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 
-// do the thing 
-const main = () => {
+// resize the canvas to prevent poor resolution
+const resizeRendererToDisplaySize = renderer => {
+    // get the current dimensions of the canvas
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    // determine if the canvas needs to be resized
+    const needResize = canvas.width !== width || canvas.height !== height;
+    // resize the canvas to the same area as currently seen on the screen
+    if (needResize) {
+        renderer.setSize(width, height, false);
+    }
+    return needResize;
+}
+// rendering the scene
+const renderCubes = () => {
     // A: get the canvas element (what we'll be drawing upon)
     const canvas = document.querySelector("#c");
     // B: instaniate the renderer (to do the drawing)
@@ -52,11 +66,14 @@ const main = () => {
     // I: now render the scene!
     const render = time => {
         // convert time to seconds
-        time *= 0.001;  
-        // prevent the cubes being "stretched" - sync aspect ratios of canvas and camera
-        const canvas = renderer.domElement;  // this line works but isn't needed, b/c we only have one canvas
-        camera.aspect = canvas.clientWidth / canvas.clientHeight;
-        camera.updateProjectionMatrix();
+        time *= 0.001; 
+        // resize the canvas if needed, to prevent poor resolution
+        if (resizeRendererToDisplaySize(renderer)) {
+            // also prevent the cubes being "stretched" - sync aspect ratios of canvas and camera
+            const canvas = renderer.domElement;  // this line works but isn't needed, b/c we only have one canvas
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+        } 
          // change the cube orientation
         cubes.forEach((cube, ndx) => {
             const speed = 1 + ndx * .1;
@@ -71,4 +88,4 @@ const main = () => {
     }
     requestAnimationFrame(render);
 }
-main();
+renderCubes();

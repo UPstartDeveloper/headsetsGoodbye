@@ -22,10 +22,11 @@ Split(['#view', '#controls'], {  // eslint-disable-line new-cap
 // resize the canvas to prevent poor resolution
 const resizeRendererToDisplaySize = renderer => {
     // get the current dimensions of the canvas (on the HTML document)
-    // const canvas = renderer.domElement;
     const view = document.querySelector("#view");
-    const width = view.clientWidth;
-    const height = view.clientHeight;
+    // calculate the canvas' pixel area, account for HD-DPI pixel ratios
+    const pixelRatio = window.devicePixelRatio;
+    const width = view.clientWidth * pixelRatio | 0;
+    const height = view.clientHeight * pixelRatio | 0;
     // determine if the canvas' (pixel area) needs to be resized
     const needResize = canvas.width !== width || canvas.height !== height;
     // resize the canvas to the same area as currently seen on the screen

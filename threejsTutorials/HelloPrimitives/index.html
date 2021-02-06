@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Three.js</title>
+    <!-- Bootstrap 5 CSS and JS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script> 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+    <div id="editor">
+        <div id="view">
+            <!-- Canvas to Draw the Scene -->
+            <canvas id="c"></canvas>
+        </div>
+        <div id="controls">
+            <div>
+                <p>various controls
+                    would appear here</p>
+                <div>Drag this bar</div>
+                <div>⇐</div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="https://threejsfundamentals.org/threejs/threejs-responsive.js"></script>
+    <script src="https://threejsfundamentals.org/threejs/../3rdparty/split.min.js"></script>
+ 
+    <!-- Canvas to Draw the Scene -->
+    <canvas id="c" ></canvas>
+
+    <!-- Let's Get the Three.js Party Started -->
+    <script type="module" src="./index.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+{
+    "asset": {
+        "version": "2.0",
+        "generator": "Open Asset Import Library (assimp v5.0.639693989)"
+    },
+    "accessors": [
+        {
+            "bufferView": 0,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 896,
+            "type": "VEC3",
+            "max": [
+                0.7224220037460327,
+                2.6345810890197756,
+                1.823104977607727
+            ],
+            "min": [
+                -0.7246090173721314,
+                0.046884000301361087,
+                -1.449144959449768
+            ]
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 896,
+            "type": "VEC3",
+            "max": [
+                0.9999979734420776,
+                0.9851536154747009,
+                0.9993574619293213
+            ],
+            "min": [
+                -0.9999973773956299,
+                -0.993882954120636,
+                -0.9848669171333313
+            ]
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 0,
+            "componentType": 5125,
+            "count": 1344,
+            "type": "SCALAR",
+            "max": [
+                895
+            ],
+            "min": [
+                0
+            ]
+        },
+        {
+            "bufferView": 3,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 388,
+            "type": "VEC3",
+            "max": [
+                0.7108680009841919,
+                2.5674729347229006,
+                2.0513060092926027
+            ],
+            "min": [
+                -0.7101280093193054,
+                -0.01806499995291233,
+                -0.9264450073242188
+            ]
+        },
+        {
+            "bufferView": 4,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 388,
+            "type": "VEC3",
+            "max": [
+                0.9999685287475586,
+                0.9633337259292603,
+                0.9960117340087891
+            ],
+            "min": [
+                -0.9999642372131348,
+                -0.9998664855957031,
+                -0.8759234547615051
+            ]
+        },
+        {
+            "bufferView": 5,
+            "byteOffset": 0,
+            "componentType": 5125,
+            "count": 588,
+            "type": "SCALAR",
+            "max": [
+                387
+            ],
+            "min": [
+                0
+            ]
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 38544,
+            "uri": "zwoavnhsipkp.bin"
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 10752,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 10752,
+            "byteLength": 10752,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 21504,
+            "byteLength": 5376,
+            "target": 34963
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 26880,
+            "byteLength": 4656,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 31536,
+            "byteLength": 4656,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 36192,
+            "byteLength": 2352,
+            "target": 34963
+        }
+    ],
+    "materials": [
+        {
+            "name": "DefaultMaterial",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    1.0
+                ],
+                "metallicFactor": 0.0
+            }
+        },
+        {
+            "name": "Beige",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    1.0
+                ],
+                "metallicFactor": 0.0
+            }
+        },
+        {
+            "name": "Brown",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    1.0
+                ],
+                "metallicFactor": 0.0
+            }
+        }
+    ],
+    "meshes": [
+        {
+            "name": "Pug_Cylinder",
+            "primitives": [
+                {
+                    "mode": 4,
+                    "material": 1,
+                    "indices": 2,
+                    "attributes": {
+                        "POSITION": 0,
+                        "NORMAL": 1
+                    }
+                },
+                {
+                    "mode": 4,
+                    "material": 2,
+                    "indices": 5,
+                    "attributes": {
+                        "POSITION": 3,
+                        "NORMAL": 4
+                    }
+                }
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "name": "zwoavnhsipkp.obj",
+            "children": [
+                1
+            ]
+        },
+        {
+            "name": "Pug_Cylinder",
+            "mesh": 0
+        }
+    ],
+    "scenes": [
+        {
+            "nodes": [
+                0
+            ]
+        }
+    ],
+    "scene": 0
+}

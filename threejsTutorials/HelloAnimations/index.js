@@ -33,7 +33,6 @@ function main() {
   addLight(-5, 5, 5);
 
   ///////////   NEW CONCEPTS  //////////////////////////////
-
   const manager = new THREE.LoadingManager();
   manager.onLoad = init;
 
@@ -43,7 +42,7 @@ function main() {
     progressbarElem.style.width = `${itemsLoaded / itemsTotal * 100 | 0}%`;
   };
 
- // load the GLTF models
+  // load the GLTF models
   const models = {
     pig:    { url: 'https://threejsfundamentals.org/threejs/resources/models/animals/Pig.gltf' },
     cow:    { url: 'https://threejsfundamentals.org/threejs/resources/models/animals/Cow.gltf' },
@@ -123,7 +122,7 @@ function playNextAction(mixerInfo) {
 
 // allow the user to trigger the animations
 window.addEventListener('keydown', (e) => {
-  const mixerInfo = mixerInfos[e.key - 49];
+  const mixerInfo = mixerInfos[e.keyCode - 49];
   if (!mixerInfo) {
     return;
   }
@@ -144,7 +143,7 @@ window.addEventListener('keydown', (e) => {
 
   let then = 0;
   function render(now) {
-    now *= 0.001;  // convert to seconds
+    now *= 0.001;  // convert to sections
     const deltaTime = now - then;
     then = now;
 
@@ -154,7 +153,6 @@ window.addEventListener('keydown', (e) => {
       camera.updateProjectionMatrix();
     }
 
-    // update the animations
     for (const {mixer} of mixerInfos) {
       mixer.update(deltaTime);
     }

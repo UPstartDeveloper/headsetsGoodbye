@@ -122,7 +122,39 @@ const main = () => {
         }
       }
     }
-    // TODO: using the mouse's current position to do our picking
+    // init the position of the object we're picking
+    const pickPosition = {x: 0, y: 0};
+    clearPickPosition();
+    
+    function getCanvasRelativePosition(event) {
+      // get the x and y coordinates of the user's pointer
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * canvas.width  / rect.width,
+        y: (event.clientY - rect.top ) * canvas.height / rect.height,
+      };
+    }
+    
+    function setPickPosition(event) {
+      // find the position of the object to pick
+      const pos = getCanvasRelativePosition(event);
+      pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
+      pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
+    }
+    
+    function clearPickPosition() {
+      // unlike the mouse which always has a position
+      // if the user stops touching the screen we want
+      // to stop picking. For now we just pick a value
+      // unlikely to pick something
+      pickPosition.x = -100000;
+      pickPosition.y = -100000;
+    }
+    
+    // track the mouse's movement - so we know which object is being picked
+    window.addEventListener('mousemove', setPickPosition);
+    window.addEventListener('mouseout', clearPickPosition);
+    window.addEventListener('mouseleave', clearPickPosition);
     // F: add a directional light
     const color = 0xFFFFFF;  // just use white light for now
     const intensity = 1;

@@ -1,6 +1,13 @@
 # headsetsGoodbye
 Develop WebVR apps with nothing but a camera. Made w/ love and Google MediaPipe.
 
+## Sample Apps
+Below is a list of mini-projects that the team built as we built out the features of the website. They are mainly off the tutorials on the [Three.js Fundamentals website](https://threejsfundamentals.org/threejs/lessons/threejs-fundamentals.html), and served as stepping stones as we built the project:
+
+1. "Barnyard Race" - [interactive animations](https://zainraza.me/headsetsGoodbye/threejsTutorials/HelloAnimations/)
+2. "Cube Me" - [experimenting with cube textures](https://zainraza.me/headsetsGoodbye/threejsTutorials/HelloPrimitives/)
+3. "Pipe Time" - [interactive object picking](https://zainraza.me/headsetsGoodbye/threejsTutorials/HelloCube/)
+
 ## Credits
 Much credit to [Oz Ramos](https://twitter.com/midiblocks), the creator of [Handsfree.js](https://handsfree.js.org/), since your work has also played a great role in this project!
 

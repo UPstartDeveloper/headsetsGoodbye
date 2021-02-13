@@ -35,6 +35,38 @@ const resizeRendererToDisplaySize = renderer => {
     }
     return needResize;
 }
+
+// generating a single random number in a specified range
+const rand = (min, max) => {
+  // returns a random number between max and min
+  if (max === undefined) {
+    max = min;
+    min = 0;
+  }
+  return min + (max - min) * Math.random();
+}
+ 
+const randomColor = () => {
+  // defines the hue and saturation for the color randomly
+  return `hsl(${rand(360) | 0}, ${rand(50, 100) | 0}%, 50%)`;
+}
+ 
+/* Generating 100 cubes with random colors, positions, orientations,
+ * and scales. 
+ */
+const numObjects = 100;
+for (let i = 0; i < numObjects; ++i) {
+  const material = new THREE.MeshPhongMaterial({
+    color: randomColor(),
+  });
+ 
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+ 
+  cube.position.set(rand(-20, 20), rand(-20, 20), rand(-20, 20));
+  cube.rotation.set(rand(Math.PI), rand(Math.PI), 0);
+  cube.scale.set(rand(3, 6), rand(3, 6), rand(3, 6));
+}
 // rendering the scene
 const renderCubes = () => {
     // A: get the canvas element (what we'll be drawing upon)
@@ -42,15 +74,21 @@ const renderCubes = () => {
     // B: instaniate the renderer (to do the drawing)
     const renderer = new THREE.WebGLRenderer({canvas});
     // C: instantiate the camera
-    const fov = 75;  // fov = "field of view"
+    const fov = 60;  // fov = "field of view"
     const aspect = 2;  // the canvas default
     const near = 0.1;
-    const far = 5;
+    const far = 200;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     // move the camera to look down on the box
-    camera.position.z = 2;
+    camera.position.z = 30;
     // D: instantiate a scene - anything we want to draw gets added to it
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color("white");
+    // parent the camera to a pole - this pole is our selfie-stick,
+    // so we can spin the pole around the scene to move the camera
+    const cameraPole = new THREE.Object3D();
+    scene.add(cameraPole);
+    cameraPole.add(camera);
     // E: make the geometry for a box
     const boxWidth = 1;
     const boxHeight = 1;
@@ -83,6 +121,8 @@ const renderCubes = () => {
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(-1, 2, 4);
     scene.add(light);
+    // put the light on the camera, so the light will moves with it
+    camera.add(light);
     // I: now render the scene!
     const render = time => {
         // convert time to seconds
@@ -101,9 +141,11 @@ const renderCubes = () => {
             cube.rotation.x = rot;
             cube.rotation.y = rot;
         });
-        // render the cube in one orientation
+        // spin the camera pole
+        cameraPole.rotation.y = time * .1;
+        // render the cubes in one orientation
         renderer.render(scene, camera);
-        // and see the cube again in rapid succession to create movement
+        // and see the cubes again in rapid succession to create movement
         requestAnimationFrame(render);
     }
     requestAnimationFrame(render);

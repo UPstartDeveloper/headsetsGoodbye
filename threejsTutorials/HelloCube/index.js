@@ -65,10 +65,16 @@ const main = () => {
     /* Generating 100 cubes with random colors, positions, orientations,
     * and scales. 
     */
+   const loader = new THREE.TextureLoader();
+   const texture = loader.load('resources/images/frame.png');
     const numObjects = 100;
     for (let i = 0; i < numObjects; ++i) {
       const material = new THREE.MeshPhongMaterial({
         color: randomColor(),
+        map: texture,
+        transparent: true,
+        side: THREE.DoubleSide,
+        alphaTest: 0.1
       });
     
       const cube = new THREE.Mesh(geometry, material);

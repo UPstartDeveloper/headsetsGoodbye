@@ -35,9 +35,12 @@ const main = () => {
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     // move the camera to look down on the box
     camera.position.z = 30;
-    // D: instantiate a scene - anything we want to draw gets added to it
+    // D: instantiate the viewing scene - anything we want to draw gets added to it
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("white");
+    // create the picking scene
+    const pickingScene = new THREE.Scene();
+    pickingScene.background = new THREE.Color(0);
     // parent the camera to a pole - this pole is our selfie-stick,
     // so we can spin the pole around the scene to move the camera
     const cameraPole = new THREE.Object3D();
@@ -67,8 +70,11 @@ const main = () => {
     */
    const loader = new THREE.TextureLoader();
    const texture = loader.load('resources/images/frame.png');
+    // these cubes will be mapped to an id (GPU-based picking)
+    const idToObject = {};
     const numObjects = 100;
     for (let i = 0; i < numObjects; ++i) {
+      const id = i + 1;
       const material = new THREE.MeshPhongMaterial({
         color: randomColor(),
         map: texture,
@@ -77,12 +83,31 @@ const main = () => {
         alphaTest: 0.1
       });
     
+      // add the cube to the viewing scene
       const cube = new THREE.Mesh(geometry, material);
       scene.add(cube);
-    
+      // map it to its id
+       idToObject[id] = cube;
+      
       cube.position.set(rand(-20, 20), rand(-20, 20), rand(-20, 20));
       cube.rotation.set(rand(Math.PI), rand(Math.PI), 0);
       cube.scale.set(rand(3, 6), rand(3, 6), rand(3, 6));
+      // add a corresponding cube to in the same location, in the 2nd scene
+      const pickingMaterial = new THREE.MeshPhongMaterial({
+          emissive: new THREE.Color(id),
+          color: new THREE.Color(0, 0, 0),
+          specular: new THREE.Color(0, 0, 0),
+          map: texture,
+          transparent: true,
+          side: THREE.DoubleSide,
+          alphaTest: 0.5,
+          blending: THREE.NoBlending,
+        });
+      const pickingCube = new THREE.Mesh(geometry, pickingMaterial);
+      pickingScene.add(pickingCube);
+      pickingCube.position.copy(cube.position);
+      pickingCube.rotation.copy(cube.rotation);
+      pickingCube.scale.copy(cube.scale);
     }
     // resize the canvas to prevent poor resolution
     const resizeRendererToDisplaySize = renderer => {
@@ -101,26 +126,56 @@ const main = () => {
         return needResize;
     }
     /* this class encapsulates all we need to manage "picking" */
-    class PickHelper {
+    class GPUPickHelper {
       constructor() {
-        this.raycaster = new THREE.Raycaster();
         this.pickedObject = null;
         this.pickedObjectSavedColor = 0;
+        // create a 1x1 pixel render target
+        this.pickingTexture = new THREE.WebGLRenderTarget(1, 1);
+        this.pixelBuffer = new Uint8Array(4);
       }
-      pick(normalizedPosition, scene, camera, time) {
+      pick(cssPosition, scene, camera, time) {
+        const {pickingTexture, pixelBuffer} = this;
         // restore the color if there is a picked object
         if (this.pickedObject) {
           this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
           this.pickedObject = undefined;
         }
+        // set the view offset to represent just a single pixel under the mouse
+        const pixelRatio = renderer.getPixelRatio();
+        camera.setViewOffset(
+            renderer.getContext().drawingBufferWidth,   // full width
+            renderer.getContext().drawingBufferHeight,  // full top
+            cssPosition.x * pixelRatio | 0,             // rect x
+            cssPosition.y * pixelRatio | 0,             // rect y
+            1,                                          // rect width
+            1,                                          // rect height
+        );
+        // render the scene
+        renderer.setRenderTarget(pickingTexture)
+        renderer.render(scene, camera);
+        renderer.setRenderTarget(null);
+ 
+        // clear the view offset so rendering returns to normal
+        camera.clearViewOffset();
+        //read the pixel
+        renderer.readRenderTargetPixels(
+            pickingTexture,
+            0,   // x
+            0,   // y
+            1,   // width
+            1,   // height
+            pixelBuffer);
     
-        // cast a ray through the frustum
-        this.raycaster.setFromCamera(normalizedPosition, camera);
-        // get the list of objects the ray intersected
-        const intersectedObjects = this.raycaster.intersectObjects(scene.children);
-        if (intersectedObjects.length) {
+        const id =
+            (pixelBuffer[0] << 16) |
+            (pixelBuffer[1] <<  8) |
+            (pixelBuffer[2]      );
+          
+        const intersectedObject = idToObject[id];
+        if (intersectedObject) {
           // pick the first object. It's the closest one
-          this.pickedObject = intersectedObjects[0].object;
+          this.pickedObject = intersectedObject;
           // save its color
           this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
           // set its emissive color to flashing red/yellow
@@ -145,8 +200,12 @@ const main = () => {
     function setPickPosition(event) {
       // find the position of the object to pick
       const pos = getCanvasRelativePosition(event);
-      pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
-      pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
+      /*
+       * CPU-based picking: requires raycasting
+       * GPU-based picking: not required, use the pixel pos itself
+       */
+      pickPosition.x = pos.x;
+      pickPosition.y = pos.y;
     }
     
     function clearPickPosition() {
@@ -181,7 +240,7 @@ const main = () => {
     // put the light on the camera, so the light will moves with it
     camera.add(light);
     // instantiate an object picker, so we can change object colors
-    const pickHelper = new PickHelper();
+    const pickHelper = new GPUPickHelper();
     // I: now render the scene!
     const render = time => {
         // convert time to seconds
@@ -196,7 +255,7 @@ const main = () => {
         // spin the camera pole
         cameraPole.rotation.y = time * .1;
         // pick the object that the user might be pointer at (change it's colors)
-        pickHelper.pick(pickPosition, scene, camera, time);
+        pickHelper.pick(pickPosition, pickingScene, camera, time);
         // render the cubes in one orientation
         renderer.render(scene, camera);
         // and see the cubes again in rapid succession to create movement

@@ -130,6 +130,7 @@ const main = () => {
       // get the x and y coordinates of the user's pointer
       const rect = canvas.getBoundingClientRect();
       return {
+        // normalize the coordinates
         x: (event.clientX - rect.left) * canvas.width  / rect.width,
         y: (event.clientY - rect.top ) * canvas.height / rect.height,
       };
@@ -151,10 +152,20 @@ const main = () => {
       pickPosition.y = -100000;
     }
     
-    // track the mouse's movement - so we know which object is being picked
+    // WEB: track the mouse's movement - so we know which object is being picked
     window.addEventListener('mousemove', setPickPosition);
     window.addEventListener('mouseout', clearPickPosition);
     window.addEventListener('mouseleave', clearPickPosition);
+    // MOBILE: track the movement of fingers
+    window.addEventListener('touchstart', (event) => {
+      // prevent the window from scrolling
+      event.preventDefault();
+      setPickPosition(event.touches[0]);
+    }, {passive: false});
+    window.addEventListener('touchmove', (event) => {
+      setPickPosition(event.touches[0]);
+    });
+    window.addEventListener('touchend', clearPickPosition);
     // F: add a directional light
     const color = 0xFFFFFF;  // just use white light for now
     const intensity = 1;
@@ -163,6 +174,8 @@ const main = () => {
     scene.add(light);
     // put the light on the camera, so the light will moves with it
     camera.add(light);
+    // instantiate an object picker, so we can change object colors
+    const pickHelper = new PickHelper();
     // I: now render the scene!
     const render = time => {
         // convert time to seconds
@@ -176,6 +189,8 @@ const main = () => {
         } 
         // spin the camera pole
         cameraPole.rotation.y = time * .1;
+        // pick the object that the user might be pointer at (change it's colors)
+        pickHelper.pick(pickPosition, scene, camera, time);
         // render the cubes in one orientation
         renderer.render(scene, camera);
         // and see the cubes again in rapid succession to create movement

@@ -1,0 +1,223 @@
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link href="/assets/handsfree/assets/handsfree.css" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        background-color: #fff;
+        color: #2a2a2a;
+        font-size: 12px;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        height: 100%;
+        font-family: sans-serif;
+      }
+
+      select {
+        margin: 0 0.6rem;
+      }
+
+      label {
+        cursor: pointer;
+      }
+
+      input[type=checkbox] {
+        transform: scale(0.8);
+        -moz-transform: scale(0.8);
+        -webkit-transform: scale(0.8);
+        margin: 0;
+        margin-right: 2px;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      .component {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .main-component {
+        flex: 1;
+      }
+
+      .device-properties-component {
+        width: 260px;
+        border-left: 1px solid #ddd;
+      }
+
+      .device-property-component {
+        border-bottom: 1px solid #ddd;
+      }
+
+      .device-property-content {
+        padding: 10px;
+      }
+
+      .device-property-content > div {
+        margin: 4px 10px;
+      }
+
+      .title-bar {
+        display: flex;
+        flex-direction: row;
+        height: 25px;
+        background-color: #f9f9fa;
+        border-width: 0px 0px 1px 0px;
+        border-style: solid;
+        border-color: #ddd;
+        align-items: center;
+        padding: 0 22px;
+      }
+
+      .device-properties-component .title-bar {
+        cursor: pointer;
+      }
+
+      .device-properties-component .title-bar:hover {
+        background-color: #f2f2f2;
+      }
+
+      button {
+        margin: 0 2px;
+        background-color: #f3f3f3;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        color: #363636;
+        cursor: pointer;
+        outline-style: none;
+      }
+
+      button:hover {
+        background-color: #e8e8e8;
+      }
+
+      button.pressed {
+        background-color: #0074e8;
+        border-color: #fff;
+        color: #fff;
+      }
+
+      .trigger-button {
+        height: 30px;
+        width: 100%;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+
+      .item-right {
+        margin-left: auto;
+      }
+
+      .border-top {
+        border-top: 1px solid #ddd;
+      }
+
+      .key, .value {
+        font-family: 'Roboto Mono', monospace;
+      }
+
+      .key {
+        color: #0074e8;
+      }
+
+      .value {
+        color: #dd00a9;
+        cursor: pointer;
+      }
+
+      .value:hover {
+        background: #f0f0f0;
+      }
+
+      .icon {
+        position: absolute;
+        color: #929294;
+        margin-left: -15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="component main-component">
+      <div class="title-bar">
+        <select id="deviceSelect"></select>
+        <label id="stereoEffectLabel"><input id="stereoCheckbox" type="checkbox" checked>Stereo effect</label>
+        <span id="devicePropertiesExpandIcon" class="item-left icon">&#9660;</span>
+      </div>
+      <div id="renderComponent" class="component main-component"></div>
+      <div class="title-bar border-top">
+        <button id="resetPoseButton">Reset pose</button>
+        <button id="exitButton">Exit immersive</button>
+      </div>
+    </div>
+    <div id="devicePropertiesComponent" class="component device-properties-component">
+      <!-- Headset Panel -->
+      <div id="headsetComponent" class="component device-property-component">
+        <div class="title-bar"><span class="icon">&#9660;</span>Headset</div>
+        <div class="component device-property-content">
+          <div><span class="key">position:</span> <span class="value" id="headsetPosition"></span></div>
+          <div><span class="key">rotation:</span> <span class="value" id="headsetRotation"></span></div>
+
+          <!-- Handsfree -->
+          <div>
+            <button id="startHandsfree" class="handsfree-show-when-stopped handsfree-hide-when-loading">Start Handsfree</button>
+            <button id="stopHandsfree" class="handsfree-show-when-started" style="background: #f66; color: #fff">Stop Handsfree</button>
+          </div>
+          <div>
+            <button id="toggleHandsfreeWebcam" class="handsfree-show-when-started">Show/Hide webcam feed</button>
+          </div>
+
+          <div>
+            <div>
+              <label class="handsfree-show-when-started">Handsfree rotation multiplier</label>
+              <input class="handsfree-show-when-started" type="range" min="0" max="5" step=".25" value="1" id="handfree-head-rotation-multiplier">
+            </div>
+            <div>
+              <label class="handsfree-show-when-started">Handsfree translation multiplier</label>
+              <input class="handsfree-show-when-started" type="range" min="0" max="5" step=".25" value="1" id="handfree-head-translation-multiplier">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right controller panel -->
+      <div id="rightControllerComponent" class="component device-property-component">
+        <div class="title-bar"><span class="icon">&#9660;</span>Right controller</div>
+        <div class="component device-property-content">
+          <div><span class="key">position:</span> <span class="value" id="rightControllerPosition"></span></div>
+          <div><span class="key">rotation:</span> <span class="value" id="rightControllerRotation"></span></div>
+          <div><button class="trigger-button" id="rightSelectButton">select button</button></div>
+          <div><button class="trigger-button" id="rightSqueezeButton">squeeze button</button></div>
+        </div>
+      </div>
+
+      <!-- Left controller panel -->
+      <div id="leftControllerComponent" class="component device-property-component">
+        <div class="title-bar"><span class="icon">&#9660;</span>Left controller</div>
+        <div class="component device-property-content">
+          <div><span class="key">position:</span> <span class="value" id="leftControllerPosition"></span></div>
+          <div><span class="key">rotation:</span> <span class="value" id="leftControllerRotation"></span></div>
+          <div><button class="trigger-button" id="leftSelectButton">select button</button></div>
+          <div><button class="trigger-button" id="leftSqueezeButton">squeeze button</button></div>
+        </div>
+      </div>
+    </div>
+    <script src="three/three.js"></script>
+    <script src="three/GLTFLoader.js"></script>
+    <script src="three/OBJLoader.js"></script>
+    <script src="three/OrbitControls.js"></script>
+    <script src="three/TransformControls.js"></script>
+    <script src="../ConfigurationManager.js"></script>
+    <script src="panel.js"></script>
+
+    <script src="/src/handsfree/panel.js"></script>
+    <script src="/assets/gsap.min.js"></script>
+  </body>
+</html>

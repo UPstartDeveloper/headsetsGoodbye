@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handsfree Browser</title>
+  <link rel="stylesheet" href="/extension/assets/css/spectre.css">
+  <link rel="shortcut icon" href="/extension/assets/favicon.png" type="image/x-icon">
+</head>
+<body style="padding-top: 2em">
+  <section class="container grid-lg">
+    <div class="columns">
+      <div class="column">
+        <h1>Handsfree Browser: Permissions</h1>
+        <p>Before you can get started you'll need to allow the extension access to the webcam. Here are some things to know:</p>
+        <ul>
+          <li>This permission is exclusive to this Browser Extension</li>
+          <li>The webcam is sandboxed. It cannot be accessed by other sites or extensions, even while it's running</li>
+          <li>Websites that make use of webcams will still require you to approve permissions</li>
+          <li>Computer vision happens entirely within this Extension, no data enters or leaves this extension</li>
+          <li>No analytics, data, or usage stats of any kind is ever collected</li>
+          <li>This project is fully documented and open sourced: <a target="_blank" href="https://github.com/midiblocks/handsfree-browser">https://github.com/midiblocks/handsfree-browser</a></li>
+        </ul>
+        <p>
+          <button id="handsfree-approve" class="btn btn-primary">Approve and Start Handsfree Mode</button>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script src="stream-capture.js"></script>
+</body>
+</html>

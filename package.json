@@ -1,0 +1,22 @@
+{
+  "name": "headsetsgoodbye",
+  "version": "1.0.0",
+  "description": "A tool for building WebXR experiences in the browser, with only a web camera.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UPstartDeveloper/headsetsGoodbye.git"
+  },
+  "author": "Zain Raza",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UPstartDeveloper/headsetsGoodbye/issues"
+  },
+  "homepage": "https://github.com/UPstartDeveloper/headsetsGoodbye#readme",
+  "dependencies": {
+    "handsfree": "^8.4.0"
+  }
+}

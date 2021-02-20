@@ -1,10 +1,10 @@
-$rig = document.querySelector('#rig')
+let rig = document.querySelector('#rig')
 
 // Let's use weboji. See: https://handsfree.js.org/ref/model/weboji
 window.handsfree = new Handsfree({weboji: true})
 
 // Used to hold tween values (without this things will be jerky)
-tween = {yaw: 0, pitch: 0, roll: 0, x: 0, y: 0, z: 0}
+let tween = {yaw: 0, pitch: 0, roll: 0, x: 0, y: 0, z: 0}
 
 // Create a new "plugin" to hook into the main loop
 // @see https://handsfree.js.org/guide/the-loop
@@ -33,6 +33,6 @@ handsfree.use('lookHandsfree', ({weboji}) => {
   })
 
   // Use the tweened values instead of the actual current values from webcam
-  $rig.setAttribute('rotation', `${tween.yaw} ${tween.pitch} ${tween.roll}`)
-  $rig.setAttribute('position', `${tween.x} ${tween.y} ${tween.z}`)
+  rig.setAttribute('rotation', `${tween.yaw} ${tween.pitch} ${tween.roll}`)
+  rig.setAttribute('position', `${tween.x} ${tween.y} ${tween.z}`)
 })

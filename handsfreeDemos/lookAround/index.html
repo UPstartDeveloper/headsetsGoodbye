@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>A-Frame: Look around handsfree</title>
+    <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js" integrity="sha512-IQLehpLoVS4fNzl7IfH8Iowfm5+RiMGtHykgZJl9AWMgqx0AmJ6cRWcB+GaGVtIsnC4voMfm8f2vwtY+6oPjpQ==" crossorigin="anonymous"></script>
+    <!-- Include Handsfree.js in head -->
+    <link rel="stylesheet" href="https://unpkg.com/handsfree@8.0.7/build/lib/assets/handsfree.css" />
+    <script src="https://unpkg.com/handsfree@8.0.7/build/lib/handsfree.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <script type="module" src="./index.js"></script>
+  </head>
+  <body>
+    <!-- Our cover/info card -->
+    <div id="cover" class="handsfree-show-when-stopped">
+      <h1>Look around <a href="https://aframe.io/">A-Frame</a> handsfree</h1>
+      <p><img src="https://media1.giphy.com/media/YOPrRX6vTy6tb3frgt/giphy.gif"></p>
+      <ul>
+        <li>Rotate head around to rotate camera</li>
+        <li>Move head around to move camera (slowly 😅)</li>
+        <li>Explore the walkthrough for this pen at <a href="https://handsfree.js.org/integration/aframe/look-around-handsfree" target="_blank">Handsfree.js.org</a></li>
+      </ul>
+
+        <!-- Button. Notice the helper classes :) -->
+    <div align=center>
+      <button onclick="handsfree.start()" class="handsfree-show-when-stopped handsfree-hide-when-loading">Start webcam</button>
+      <button class="handsfree-show-when-loading">Loading...</button>
+      <button onclick="handsfree.stop()" class="handsfree-show-when-started">Stop webcam</button>
+    </div>
+  </div>
+    
+    <!-- Aframe -->
+    <a-scene fog="type: exponential; color: #000; far: 30; density: 0.075">
+      <a-assets>
+        <img src="https://cdn.glitch.com/a2469ad6-a9ce-4918-8347-7348024d9f06%2F25P1geh.png?1543692382066" id="grid" crossorigin="anonymous">
+      </a-assets>
+      
+      <!-- Camera Rig: This is what we control handsfree -->
+      <a-entity id="rig" position="0 1 -5">
+        <a-camera></a-camera>
+      </a-entity>
+
+      <!-- Walls -->
+      <a-entity id="wall-bottom" geometry="primitive: plane; width: 10000; height: 10000;" rotation="-90 0 0" position="0 -2 0" material="src: #grid; repeat: 10000 10000;"></a-entity>
+      <a-entity id="wall-top" geometry="primitive: plane; width: 10000; height: 10000;" rotation="90 0 0" position="0 7 0" material="src: #grid; repeat: 10000 10000;"></a-entity>
+      <a-entity id="wall-right" geometry="primitive: plane; width: 10000; height: 10000;" rotation="0 -90 0" position="8 0 0" material="src: #grid; repeat: 10000 10000;"></a-entity>
+      <a-entity id="wall-left" geometry="primitive: plane; width: 10000; height: 10000;" rotation="0 90 0" position="-8 0 0" material="src: #grid; repeat: 10000 10000;"></a-entity>
+      <a-entity id="wall-back" geometry="primitive: plane; width: 10000; height: 10000;" rotation="0 0 0" position="0 0 -15" material="src: #grid; repeat: 10000 10000;"></a-entity>
+
+      <!-- Some lights -->
+      <a-entity light="color: #000; intensity: 1; type: ambient;" visible=""></a-entity>
+      <a-entity light="color: #000; intensity: 1.5" position="5 5 5"></a-entity>
+      <a-entity light="color: #000; intensity: 0.5" position="-5 5 15"></a-entity>
+      <a-entity light="color: #aaa; type: ambient;"></a-entity>
+    </a-scene>
+  </body>
+</html>

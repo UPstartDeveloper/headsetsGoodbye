@@ -19,13 +19,16 @@
         <li>Explore the walkthrough for this pen at <a href="https://handsfree.js.org/integration/aframe/look-around-handsfree" target="_blank">Handsfree.js.org</a></li>
       </ul>
 
-        <!-- Button. Notice the helper classes :) -->
-    <div align=center>
+        <!-- Buttons. Notice the helper classes :) -->
+    <div id="start-and-stop">
       <button onclick="handsfree.start()" class="handsfree-show-when-stopped handsfree-hide-when-loading">Start webcam</button>
       <button class="handsfree-show-when-loading">Loading...</button>
       <button onclick="handsfree.stop()" class="handsfree-show-when-started">Stop webcam</button>
     </div>
   </div>
+
+  <!-- Show camera stream -->
+  <script src="stream-capture.js"></script>
     
     <!-- Aframe -->
     <a-scene fog="type: exponential; color: #000; far: 30; density: 0.075">

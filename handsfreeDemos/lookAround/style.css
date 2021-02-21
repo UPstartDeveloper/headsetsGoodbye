@@ -15,3 +15,12 @@ button {
     border-radius: 3px;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.35);
 }
+
+#start-and-stop {
+    align-self: center;
+
+}
+
+#camera-stream {
+    align-self: flex-end;
+}

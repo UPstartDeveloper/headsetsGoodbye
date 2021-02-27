@@ -1,13 +1,23 @@
-import { main } from './index';
+import { setupRace } from './index.js';
 
 
-export default function startHandsAndThree() {
+export function startHandsAndThree() {
     // start handsfree face tracking
     handsfree.start();
     // add the canvas before Three.js is loaded
-    let canv = document.createElement('canvas');
-    canv.id = 'c';
-    document.body.appendChild(canv); // adds the canvas to the body element
+    /* the structure we are making below looks like the following HTML:
+     *  <div id="loading">
+     *     <div> 
+     *       <div>...loading...</div>
+     *       <div class="progress">
+     *          <div id="progressbar"></div>
+     *       </div>
+     *     </div>
+     *  </div>
+     */
+    let canvas = document.createElement('canvas');
+    canvas.id = 'c';
+    document.body.appendChild(canvas); // adds the canvas to the body element
     // add the the progress bar before Three.js is loaded
     let container = document.getElementsByClassName('container')[0];
     let loadingDiv = document.createElement('div');
@@ -25,18 +35,7 @@ export default function startHandsAndThree() {
     innerDivOne.appendChild(progressDiv);
     let progressBar = document.createElement('div');
     progressBar.id = "progressbar";
-    progressDiv.appendChild(progressBar);
-
-    /* the structure we are making looks like the following:
-     *   <div id="loading">
-     *       <div> // innerDivOne
-     *          <div>...loading...</div>
-     *          <div class="progress">
-     *              <div id="progressbar"></div>
-     *          </div>
-     *     </div>
-     *  </div>
-     */ 
+    progressDiv.appendChild(progressBar); 
     // set up the Three.js environment
-    main();
+    setupRace();
 }

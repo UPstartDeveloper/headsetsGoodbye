@@ -27,18 +27,18 @@
 
                     <!-- Buttons. Notice the helper classes :) -->
                     <div id="start-and-stop">
-                        <button onclick="startHandsAndThree()" class="btn btn-success handsfree-show-when-stopped handsfree-hide-when-loading">Start webcam</button>
+                        <button id="start-button" class="btn btn-success handsfree-show-when-stopped handsfree-hide-when-loading">Start webcam</button>
                         <button class="handsfree-show-when-loading">Loading...</button>
                         <button onclick="handsfree.stop()" class="handsfree-show-when-started">Stop webcam</button>
                     </div>
                 </div>
             </div>
+            <!-- Customized Handsfree functions -->
+            <script type="module" src="./handsfreeTracking.js">
+                // start the game when the user clicks Start
+                const startBtn = document.getElementById("start-button");
+                startBtn.addEventListener("click", startHandsAndThree);
+            </script>
         </div>
-
-        <!-- Make the 3D environment (Three.js) -->
-        <script type="module" src="./index.js"></script>
-        <!-- Customized Handsfree functions -->
-        <script type="module" src="./handsfreeTracking.js"></script>
-        
     </body>
 </html>

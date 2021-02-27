@@ -3,7 +3,7 @@ import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/t
 import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/loaders/GLTFLoader.js';
 import {SkeletonUtils} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/utils/SkeletonUtils.js';
 
-export default function main() {
+export function setupRace() {
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
 

@@ -46,7 +46,7 @@ export function startHandsAndThree() {
 }
 
 const trackFace = (handsfree, camera) => {
-    // Used to hold tween values (without this things will be jerky)
+    // Used to hold initial position values
     let tween = {
         yaw: 0, 
         pitch: 0, 
@@ -55,7 +55,7 @@ const trackFace = (handsfree, camera) => {
         y: camera.position.y, 
         z: camera.position.z
     }
-    console.log("Tween position original " + tween.x + ", " + tween.y + ", " +tween.z)
+    console.log("position original " + tween.x + ", " + tween.y + ", " +tween.z)
 
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
@@ -66,32 +66,28 @@ const trackFace = (handsfree, camera) => {
     const rot = weboji.degree
     rot[0] -= 15
 
-    // Calculate position
+    // Calculate new position
     const pos = {
-        x: (weboji.translation[0] - .5) * .5,
-        y: (weboji.translation[1] - .5) * 20,
-        z: weboji.translation[2] * 40
-        
-    //    x: (weboji.translation[0] - .5) * 10,
-    //    y: (weboji.translation[1] - .5) * 20,
-    //    z: weboji.translation[2] * 40
+        x: normalize(
+            weboji.translation[0], 0, 0
+        ), 
+        y: normalize(weboji.translation[1], 5, 40), 
+        z: normalize(weboji.translation[2], 40, 80)
     }
 
     // Tween this values
-    TweenMax.to(tween, 1, {
-        yaw: -rot[0] * 1.5,
-        pitch: -rot[1] * 1.5,
-        roll: rot[2] * 1.5,
+    TweenMax.to(camera.position, 2, {
         x: pos.x,
         y: pos.y,
         z: pos.z
     })
-    // console.log(pos.x + ", " + pos.y + ", " + pos.z)
-    console.log("Tween position new " + tween.x + ", " + tween.y + ", " +tween.z)
-    // Use the tweened values instead of the actual current values from webcam
-    // camera.setAttribute('rotation', `${tween.yaw} ${tween.pitch} ${tween.roll}`)
-    camera.position.set(tween.x, tween.y, tween.z);
+    console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
     })
+}
+
+const normalize = (original, lower, upper) => {
+    // ensures that a given values falls within a specified range
+    return (original + upper - lower) 
 }
 
 // start the game when the user clicks "Start webcam"

@@ -3,7 +3,7 @@ import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/t
 import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/loaders/GLTFLoader.js';
 import {SkeletonUtils} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/utils/SkeletonUtils.js';
 
-function main() {
+export default function main() {
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
 
@@ -164,5 +164,3 @@ window.addEventListener('keydown', (e) => {
 
   requestAnimationFrame(render);
 }
-
-main();

@@ -1,0 +1,229 @@
+{
+    "asset": {
+        "version": "2.0",
+        "generator": "Open Asset Import Library (assimp v5.0.639693989)"
+    },
+    "accessors": [
+        {
+            "bufferView": 0,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 1052,
+            "type": "VEC3",
+            "max": [
+                1.2838220596313477,
+                6.923784255981445,
+                5.050253868103027
+            ],
+            "min": [
+                -1.277271032333374,
+                0.27660900354385378,
+                -3.100851058959961
+            ]
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 1052,
+            "type": "VEC3",
+            "max": [
+                0.998507022857666,
+                0.965308427810669,
+                0.9999469518661499
+            ],
+            "min": [
+                -0.998503565788269,
+                -0.975284218788147,
+                -0.999733030796051
+            ]
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 0,
+            "componentType": 5125,
+            "count": 1512,
+            "type": "SCALAR",
+            "max": [
+                1051
+            ],
+            "min": [
+                0
+            ]
+        },
+        {
+            "bufferView": 3,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 380,
+            "type": "VEC3",
+            "max": [
+                1.1204229593276978,
+                6.91508674621582,
+                5.116979122161865
+            ],
+            "min": [
+                -1.1202629804611207,
+                0.017885999754071237,
+                -4.123727798461914
+            ]
+        },
+        {
+            "bufferView": 4,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 380,
+            "type": "VEC3",
+            "max": [
+                0.9987680912017822,
+                0.9759039282798767,
+                0.974626362323761
+            ],
+            "min": [
+                -0.9990541934967041,
+                -0.9999998807907105,
+                -0.9999212026596069
+            ]
+        },
+        {
+            "bufferView": 5,
+            "byteOffset": 0,
+            "componentType": 5125,
+            "count": 558,
+            "type": "SCALAR",
+            "max": [
+                379
+            ],
+            "min": [
+                0
+            ]
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 42648,
+            "uri": "h8o39sh74rtq.bin"
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 12624,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 12624,
+            "byteLength": 12624,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 25248,
+            "byteLength": 6048,
+            "target": 34963
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 31296,
+            "byteLength": 4560,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 35856,
+            "byteLength": 4560,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 40416,
+            "byteLength": 2232,
+            "target": 34963
+        }
+    ],
+    "materials": [
+        {
+            "name": "DefaultMaterial",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    1.0
+                ],
+                "metallicFactor": 0.0
+            }
+        },
+        {
+            "name": "Material.003",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    1.0
+                ],
+                "metallicFactor": 0.0
+            }
+        },
+        {
+            "name": "Material.006",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    1.0
+                ],
+                "metallicFactor": 0.0
+            }
+        }
+    ],
+    "meshes": [
+        {
+            "name": "Horse_Cylinder",
+            "primitives": [
+                {
+                    "mode": 4,
+                    "material": 1,
+                    "indices": 2,
+                    "attributes": {
+                        "POSITION": 0,
+                        "NORMAL": 1
+                    }
+                },
+                {
+                    "mode": 4,
+                    "material": 2,
+                    "indices": 5,
+                    "attributes": {
+                        "POSITION": 3,
+                        "NORMAL": 4
+                    }
+                }
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "name": "h8o39sh74rtq.obj",
+            "children": [
+                1
+            ]
+        },
+        {
+            "name": "Horse_Cylinder",
+            "mesh": 0
+        }
+    ],
+    "scenes": [
+        {
+            "nodes": [
+                0
+            ]
+        }
+    ],
+    "scene": 0
+}

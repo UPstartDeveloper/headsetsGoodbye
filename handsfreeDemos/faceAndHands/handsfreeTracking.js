@@ -42,14 +42,20 @@ export function startHandsAndThree() {
     progressBar.id = "progressbar";
     progressDiv.appendChild(progressBar); 
     // set up the Three.js environment
-    camera = setupRace();
-    // initialize Handsfree face tracking
-    trackFace(window.handsfree, camera);
+    setupRace(trackFace, window.handsfree);
 }
 
 const trackFace = (handsfree, camera) => {
     // Used to hold tween values (without this things will be jerky)
-    let tween = {yaw: 0, pitch: 0, roll: 0, x: 0, y: 0, z: 0}
+    let tween = {
+        yaw: 0, 
+        pitch: 0, 
+        roll: 0, 
+        x: camera.position.x, 
+        y: camera.position.y, 
+        z: camera.position.z
+    }
+    console.log("Tween position original " + tween.x + ", " + tween.y + ", " +tween.z)
 
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
@@ -62,9 +68,13 @@ const trackFace = (handsfree, camera) => {
 
     // Calculate position
     const pos = {
-        x: (weboji.translation[0] - .5) * 10,
-        y: (weboji.translation[1] - .5) * 5,
-        z: 5 - weboji.translation[2] * 30
+        x: (weboji.translation[0] - .5) * .5,
+        y: (weboji.translation[1] - .5) * 20,
+        z: weboji.translation[2] * 40
+        
+    //    x: (weboji.translation[0] - .5) * 10,
+    //    y: (weboji.translation[1] - .5) * 20,
+    //    z: weboji.translation[2] * 40
     }
 
     // Tween this values
@@ -76,10 +86,11 @@ const trackFace = (handsfree, camera) => {
         y: pos.y,
         z: pos.z
     })
-
+    // console.log(pos.x + ", " + pos.y + ", " + pos.z)
+    console.log("Tween position new " + tween.x + ", " + tween.y + ", " +tween.z)
     // Use the tweened values instead of the actual current values from webcam
-    camera.setAttribute('rotation', `${tween.yaw} ${tween.pitch} ${tween.roll}`)
-    camera.setAttribute('position', `${tween.x} ${tween.y} ${tween.z}`)
+    // camera.setAttribute('rotation', `${tween.yaw} ${tween.pitch} ${tween.roll}`)
+    camera.position.set(tween.x, tween.y, tween.z);
     })
 }
 

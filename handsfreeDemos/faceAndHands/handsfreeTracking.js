@@ -1,8 +1,11 @@
+// import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './index.js';
 
 
 export function startHandsAndThree() {
     // start handsfree face tracking
+    console.log("Hello");
+    window.handsfree = new Handsfree({weboji: true});
     handsfree.start();
     // add the canvas before Three.js is loaded
     /* the structure we are making below looks like the following HTML:
@@ -39,3 +42,7 @@ export function startHandsAndThree() {
     // set up the Three.js environment
     setupRace();
 }
+
+// start the game when the user clicks "Start webcam"
+const startBtn = document.getElementById("start-button");
+startBtn.addEventListener("click", startHandsAndThree);

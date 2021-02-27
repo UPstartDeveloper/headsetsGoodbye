@@ -163,4 +163,6 @@ window.addEventListener('keydown', (e) => {
   }
 
   requestAnimationFrame(render);
+  // return the camera, so we can manipulate using Handsfree.js
+  return camera;
 }

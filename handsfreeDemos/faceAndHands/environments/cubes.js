@@ -154,5 +154,6 @@ export const renderCubes = (trackingFunc, handsfreeTracker) => {
         // let Handsfree js also manipulate the camera
         trackingFunc(handsfreeTracker, camera);
     }
+    // render the sce
     requestAnimationFrame(render);
 }

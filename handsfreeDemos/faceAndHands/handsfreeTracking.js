@@ -1,5 +1,5 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
-import { setupRace } from './index.js';
+import { setupRace } from './environments/barnyard.js';
 import { renderCubes } from './environments/cubes.js';
 
 
@@ -9,7 +9,7 @@ export function startHandsAndThree() {
     card.classList.add('disappear');
     // start handsfree face tracking
     window.handsfree = new Handsfree({weboji: true});
-    handsfree.start();
+    handsfreeTracker.start();
     // add the div to the DOM before Three.js is loaded, nest the canvas inside
     let canvasParent = document.createElement("div");
     canvasParent.id = "view";
@@ -30,6 +30,7 @@ export function startHandsAndThree() {
      *       </div>
      *     </div>
      *  </div>
+     
     let container = document.getElementsByClassName('container')[0];
     let loadingDiv = document.createElement('div');
     loadingDiv.id = 'loading'; // using the CSS to style the progress bar
@@ -40,6 +41,9 @@ export function startHandsAndThree() {
     let loadingText = document.createElement('div');
     loadingText.innerHTML = "...loading...";
     innerDivOne.appendChild(loadingText);
+    // make sure it disappears once handsfree.js is ready
+    loadingText.classList += ("handsfree-hide-when-loading");
+    
     // show the actual progress bar
     let progressDiv = document.createElement('div');
     progressDiv.className = "progress";

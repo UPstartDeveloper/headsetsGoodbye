@@ -9,7 +9,7 @@ export function startHandsAndThree() {
     card.classList.add('disappear');
     // start handsfree face tracking
     window.handsfree = new Handsfree({weboji: true});
-    handsfreeTracker.start();
+    window.handsfree.start();
     // add the div to the DOM before Three.js is loaded, nest the canvas inside
     let canvasParent = document.createElement("div");
     canvasParent.id = "view";
@@ -30,7 +30,7 @@ export function startHandsAndThree() {
      *       </div>
      *     </div>
      *  </div>
-     
+     */
     let container = document.getElementsByClassName('container')[0];
     let loadingDiv = document.createElement('div');
     loadingDiv.id = 'loading'; // using the CSS to style the progress bar
@@ -42,19 +42,22 @@ export function startHandsAndThree() {
     loadingText.innerHTML = "...loading...";
     innerDivOne.appendChild(loadingText);
     // make sure it disappears once handsfree.js is ready
-    loadingText.classList += ("handsfree-hide-when-loading");
+    //loadingText.classList += ("handsfree-hide-when-loading");
     
     // show the actual progress bar
-    let progressDiv = document.createElement('div');
-    progressDiv.className = "progress";
-    innerDivOne.appendChild(progressDiv);
-    let progressBar = document.createElement('div');
-    progressBar.id = "progressbar";
-    progressDiv.appendChild(progressBar);
-    */ 
-    // set up the Three.js environment
-    // setupRace(trackFace, window.handsfree);
-    renderCubes(trackFace, window.handsfree);
+    // let progressDiv = document.createElement('div');
+    // progressDiv.className = "progress";
+    // innerDivOne.appendChild(progressDiv);
+    // let progressBar = document.createElement('div');
+    // progressBar.id = "progressbar";
+    // progressDiv.appendChild(progressBar);
+    // list for when Handsfree is ready
+    document.addEventListener('handsfree-modelReady', () => {
+        // make the loading element go away first
+        loadingText.classList.add('disappear');
+        // set up the Three.js environment, 
+        renderCubes(trackFace, window.handsfree);
+    })
 }
 
 const trackFace = (handsfree, camera) => {

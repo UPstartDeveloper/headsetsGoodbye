@@ -1,6 +1,6 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './index.js';
-import { renderCubes } from './alternativeEnvironment.js';
+import { renderCubes } from './environments/cubes.js';
 
 
 export function startHandsAndThree() {
@@ -14,6 +14,9 @@ export function startHandsAndThree() {
     let canvasParent = document.createElement("div");
     canvasParent.id = "view";
     document.body.appendChild(canvasParent); // adds to the body element
+    // make the view element at least long enough to fill the viewport
+    canvasParent.style.minHeight = "100vh";
+    // add the canvas
     let canvas = document.createElement('canvas');
     canvas.id = 'c';
     canvasParent.appendChild(canvas); // parents the canvas to the div created above
@@ -27,7 +30,6 @@ export function startHandsAndThree() {
      *       </div>
      *     </div>
      *  </div>
-     */
     let container = document.getElementsByClassName('container')[0];
     let loadingDiv = document.createElement('div');
     loadingDiv.id = 'loading'; // using the CSS to style the progress bar
@@ -44,7 +46,8 @@ export function startHandsAndThree() {
     innerDivOne.appendChild(progressDiv);
     let progressBar = document.createElement('div');
     progressBar.id = "progressbar";
-    progressDiv.appendChild(progressBar); 
+    progressDiv.appendChild(progressBar);
+    */ 
     // set up the Three.js environment
     // setupRace(trackFace, window.handsfree);
     renderCubes();

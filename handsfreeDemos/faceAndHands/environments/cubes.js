@@ -83,7 +83,6 @@ const addSolidGeometry = (x, y, geometry) => {
 export const renderCubes = () => {
     // A: get the canvas element (what we'll be drawing upon)
     const canvas = document.querySelector("#c");
-    console.log(`Canvas is: ${canvas}`);
     // B: instaniate the renderer (to do the drawing)
     const renderer = new THREE.WebGLRenderer({canvas});
     // C: instantiate the camera
@@ -96,7 +95,7 @@ export const renderCubes = () => {
     camera.position.z = 120;
     // D: instantiate a scene - anything we want to draw gets added to it
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xAAAAAA);  // lightish gray
+    scene.background = new THREE.Color(0x000000);  // black
     // E: make the geometry for a box
     const boxWidth = 1;
     const boxHeight = 1;

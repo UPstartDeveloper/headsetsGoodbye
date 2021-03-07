@@ -50,7 +50,7 @@ export function startHandsAndThree() {
     */ 
     // set up the Three.js environment
     // setupRace(trackFace, window.handsfree);
-    renderCubes();
+    renderCubes(trackFace, window.handsfree);
 }
 
 const trackFace = (handsfree, camera) => {
@@ -72,19 +72,36 @@ const trackFace = (handsfree, camera) => {
 
     // Calculate rotation
     const rot = weboji.degree
-    rot[0] -= 15
+    rot[0] += 15
 
     // Calculate new position
     const pos = {
+        /*
         x: normalize(
             weboji.translation[0], 0, 0
         ), 
-        y: normalize(weboji.translation[1], 5, 40), 
-        z: normalize(weboji.translation[2], 40, 80)
+        y: normalize(weboji.translation[1], 0, 0), 
+        z: normalize(weboji.translation[2], 8, 15)
+        */
+       /*
+       x: weboji.translation[0],
+       y: weboji.translation[1],
+       z: weboji.translation[2],
+       */
+      /*
+        x: normalize(
+            weboji.translation[0], 0, 0
+        ), 
+        y: normalize(weboji.translation[1], 0, 0), 
+        z: weboji.translation[2] + 8
+        */
+       x: weboji.translation[0], 
+        y: weboji.translation[1], 
+        z: weboji.translation[2] + 8
     }
 
     // Tween this values
-    TweenMax.to(camera.position, 2, {
+    TweenMax.to(camera.position, 1, {
         x: pos.x,
         y: pos.y,
         z: pos.z

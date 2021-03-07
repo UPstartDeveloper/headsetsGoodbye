@@ -81,7 +81,7 @@ const addSolidGeometry = (x, y, geometry) => {
 }
 
 /* rendering the scene */
-export const renderCubes = () => {
+export const renderCubes = (trackingFunc, handsfreeTracker) => {
     // A: get the canvas element (what we'll be drawing upon)
     const canvas = document.querySelector("#c");
     // B: instaniate the renderer (to do the drawing)
@@ -151,6 +151,8 @@ export const renderCubes = () => {
         renderer.render(scene, camera);
         // and see the cube again in rapid succession to create movement
         requestAnimationFrame(render);
+        // let Handsfree js also manipulate the camera
+        trackingFunc(handsfreeTracker, camera);
     }
     requestAnimationFrame(render);
 }

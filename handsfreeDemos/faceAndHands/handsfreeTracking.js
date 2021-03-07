@@ -70,43 +70,26 @@ const trackFace = (handsfree, camera) => {
     handsfree.use('lookHandsfree', ({weboji}) => {
     if (!weboji?.degree?.[0]) return
 
-    // Calculate rotation
+    // Calculate rotation - adding because we assume camera is below eye level,
+    // like on a laptop
     const rot = weboji.degree
     rot[0] += 15
 
     // Calculate new position
     const pos = {
-        /*
-        x: normalize(
-            weboji.translation[0], 0, 0
-        ), 
-        y: normalize(weboji.translation[1], 0, 0), 
-        z: normalize(weboji.translation[2], 8, 15)
-        */
-       /*
-       x: weboji.translation[0],
-       y: weboji.translation[1],
-       z: weboji.translation[2],
-       */
-      /*
-        x: normalize(
-            weboji.translation[0], 0, 0
-        ), 
-        y: normalize(weboji.translation[1], 0, 0), 
-        z: weboji.translation[2] + 8
-        */
-       x: weboji.translation[0], 
-        y: weboji.translation[1], 
-        z: weboji.translation[2] + 8
+        x: (weboji.translation[0] -.3) * 5,
+        y: (weboji.translation[1] - .3) * 5,
+        z: (weboji.translation[2]) +  8
     }
 
     // Tween this values
-    TweenMax.to(camera.position, 1, {
+    TweenMax.to(camera.position, .95, {
         x: pos.x,
         y: pos.y,
         z: pos.z
     })
     console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
+
     })
 }
 

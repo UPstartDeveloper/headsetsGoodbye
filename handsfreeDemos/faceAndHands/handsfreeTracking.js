@@ -20,14 +20,11 @@ export function startHandsAndThree() {
     let canvas = document.createElement('canvas');
     canvas.id = 'c';
     canvasParent.appendChild(canvas); // parents the canvas to the div created above
-    // add the the progress bar before Three.js is loaded
+    // add the loading screen
     /* the structure we are making below looks like the following HTML:
      *  <div id="loading">
      *     <div> 
      *       <div>...loading...</div>
-     *       <div class="progress">
-     *          <div id="progressbar"></div>
-     *       </div>
      *     </div>
      *  </div>
      */
@@ -41,17 +38,7 @@ export function startHandsAndThree() {
     let loadingText = document.createElement('div');
     loadingText.innerHTML = "...loading...";
     innerDivOne.appendChild(loadingText);
-    // make sure it disappears once handsfree.js is ready
-    //loadingText.classList += ("handsfree-hide-when-loading");
-    
-    // show the actual progress bar
-    // let progressDiv = document.createElement('div');
-    // progressDiv.className = "progress";
-    // innerDivOne.appendChild(progressDiv);
-    // let progressBar = document.createElement('div');
-    // progressBar.id = "progressbar";
-    // progressDiv.appendChild(progressBar);
-    // list for when Handsfree is ready
+    // listen for when Handsfree is ready
     document.addEventListener('handsfree-modelReady', () => {
         // make the loading element go away first
         loadingText.classList.add('disappear');

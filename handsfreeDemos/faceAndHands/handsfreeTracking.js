@@ -98,6 +98,7 @@ const normalize = (original, lower, upper) => {
     return (original + upper - lower) 
 }
 
+/****** DRIVER CODE *******/
 // start the game when the user clicks "Start webcam"
 const startBtn = document.getElementById("start-button");
 startBtn.addEventListener("click", startHandsAndThree);

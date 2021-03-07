@@ -19,6 +19,7 @@ Split(['#view', '#controls'], {  // eslint-disable-line new-cap
   },
 });
 */
+
 // resize the canvas to prevent poor resolution
 const resizeRendererToDisplaySize = (renderer, canvas) => {
     /*
@@ -79,7 +80,7 @@ const addSolidGeometry = (x, y, geometry) => {
   addObject(x, y, mesh);
 }
 
-/* rendering the scene - input param for the id of the div that nests the canvas */
+/* rendering the scene */
 export const renderCubes = () => {
     // A: get the canvas element (what we'll be drawing upon)
     const canvas = document.querySelector("#c");
@@ -92,7 +93,7 @@ export const renderCubes = () => {
     const far = 1000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     // move the camera to look down on the box
-    camera.position.z = 120;
+    camera.position.z = 8;
     // D: instantiate a scene - anything we want to draw gets added to it
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);  // black

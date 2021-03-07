@@ -1,5 +1,6 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './index.js';
+import { renderCubes } from './alternativeEnvironment.js';
 
 
 export function startHandsAndThree() {
@@ -9,7 +10,14 @@ export function startHandsAndThree() {
     // start handsfree face tracking
     window.handsfree = new Handsfree({weboji: true});
     handsfree.start();
-    // add the canvas before Three.js is loaded
+    // add the div to the DOM before Three.js is loaded, nest the canvas inside
+    let canvasParent = document.createElement("div");
+    canvasParent.id = "view";
+    document.body.appendChild(canvasParent); // adds to the body element
+    let canvas = document.createElement('canvas');
+    canvas.id = 'c';
+    canvasParent.appendChild(canvas); // parents the canvas to the div created above
+    // add the the progress bar before Three.js is loaded
     /* the structure we are making below looks like the following HTML:
      *  <div id="loading">
      *     <div> 
@@ -20,10 +28,6 @@ export function startHandsAndThree() {
      *     </div>
      *  </div>
      */
-    let canvas = document.createElement('canvas');
-    canvas.id = 'c';
-    document.body.appendChild(canvas); // adds the canvas to the body element
-    // add the the progress bar before Three.js is loaded
     let container = document.getElementsByClassName('container')[0];
     let loadingDiv = document.createElement('div');
     loadingDiv.id = 'loading'; // using the CSS to style the progress bar
@@ -42,7 +46,8 @@ export function startHandsAndThree() {
     progressBar.id = "progressbar";
     progressDiv.appendChild(progressBar); 
     // set up the Three.js environment
-    setupRace(trackFace, window.handsfree);
+    // setupRace(trackFace, window.handsfree);
+    renderCubes();
 }
 
 const trackFace = (handsfree, camera) => {

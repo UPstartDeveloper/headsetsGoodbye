@@ -9,7 +9,9 @@ export function startHandsAndThree() {
     let card = document.getElementById("cover");
     card.classList.add('disappear');
     // start handsfree face tracking
-    window.handsfree = new Handsfree({weboji: true});
+    window.handsfree = new Handsfree({
+        weboji: true, showDebug: true
+    });
     window.handsfree.start();
     // add the div to the DOM before Three.js is loaded, nest the canvas inside
     let canvasParent = document.createElement("div");
@@ -44,10 +46,9 @@ export function startHandsAndThree() {
         // A: make the loading element go away first
         loadingText.classList.add('disappear');
         // B: start the video debugger (TODO: improve tracking so we can turn off later)
-        // OPTION A: startVisualDebugger(handsfree);
-        // OPTION B: Move the debuggers to a DIV#debug-window
-        //document.querySelector('#debug-window').appendChild(handsfree.debug.$wrap);
-        //handsfree.debug.$canvas.weboji.style.filter = 'blur(4px)'
+        // Move the debuggers to a DIV#debug-window
+        document.querySelector('#debug-window').appendChild(window.handsfree.debug.$wrap);
+        window.handsfree.debug.$canvas.weboji.style.filter = 'blur(4px)'
         // C: set up the Three.js environment, 
         renderCubes(trackFace, window.handsfree);
     })

@@ -1,6 +1,7 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './environments/barnyard.js';
 import { renderCubes } from './environments/cubes.js';
+import { startVisualDebugger } from "./streamCapture.js"
 
 
 export function startHandsAndThree() {
@@ -42,6 +43,8 @@ export function startHandsAndThree() {
     document.addEventListener('handsfree-modelReady', () => {
         // make the loading element go away first
         loadingText.classList.add('disappear');
+        // start the video debugger (TODO: improve tracking so we can turn off later)
+        startVisualDebugger(handsfree);
         // set up the Three.js environment, 
         renderCubes(trackFace, window.handsfree);
     })
@@ -57,7 +60,7 @@ const trackFace = (handsfree, camera) => {
         y: camera.position.y, 
         z: camera.position.z
     }
-    console.log("position original " + tween.x + ", " + tween.y + ", " +tween.z)
+    // console.log("position original " + tween.x + ", " + tween.y + ", " +tween.z)
 
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
@@ -82,7 +85,7 @@ const trackFace = (handsfree, camera) => {
         y: pos.y,
         z: pos.z
     })
-    console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
+    // console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
 
     })
 }

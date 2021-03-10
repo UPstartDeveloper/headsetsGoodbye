@@ -20,7 +20,7 @@
             <div class="row justify-content-center">
                 <!-- Our cover/info card -->
                 <div id="cover">
-                    <h1>Cube Space - Look Around Hands Free!</h1>
+                    <h1>Cube Space</h1>
                     <p><img src="https://media1.giphy.com/media/YOPrRX6vTy6tb3frgt/giphy.gif"></p>
                     <ol>
                         <li>Rotate head around to rotate camera</li>
@@ -36,6 +36,10 @@
                         <button onclick="handsfree.stop()" class="btn btn-danger handsfree-show-when-started">Stop webcam</button>
                     </div>
                 </div>
+            </div>
+            <!-- Visual Debugger for Handsfree.js -->
+            <div class="row justify-content-end">
+                <div id="debug-window" class="handsfree-show-when-loading handsfree-show-when-started"></div>
             </div>
             <!-- Customized Handsfree functions -->
             <script type="module" src="./handsfreeTracking.js"></script>

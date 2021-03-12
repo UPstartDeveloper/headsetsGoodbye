@@ -10,7 +10,7 @@ export function startHandsAndThree() {
     card.classList.add('disappear');
     // start handsfree face tracking
     window.handsfree = new Handsfree({
-        weboji: true, // showDebug: true TODO: resize the debug video
+        weboji: true, showDebug: true // TODO: resize the debug video dynamically
     });
     window.handsfree.start();
     // add the div to the DOM before Three.js is loaded, nest the canvas inside

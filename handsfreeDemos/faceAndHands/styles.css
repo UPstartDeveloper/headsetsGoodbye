@@ -63,9 +63,8 @@ html, body {
 }
 
 /* Visual Debugger (styles applied recursively) */
-video.handsfree-video {
-  position : absolute;
-  height : 50px;
-  width : 50px;
-
+.handsfree-debugger > * {
+  position: absolute  !important;
+  height: 10rem !important;
+  width: 10rem  !important;
 }

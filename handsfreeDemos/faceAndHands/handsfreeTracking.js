@@ -1,7 +1,6 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './environments/barnyard.js';
 import { renderCubes } from './environments/cubes.js';
-import { startVisualDebugger } from "./streamCapture.js"
 
 
 export function startHandsAndThree() {
@@ -45,11 +44,7 @@ export function startHandsAndThree() {
     document.addEventListener('handsfree-modelReady', () => {
         // A: make the loading element go away first
         loadingText.classList.add('disappear');
-        // B: start the video debugger (TODO: improve tracking so we can turn off later)
-        // Move the debuggers to a DIV#debug-window
-        document.querySelector('#debug-window').appendChild(window.handsfree.debug.$wrap);
-        window.handsfree.debug.$canvas.weboji.style.filter = 'blur(4px)'
-        // C: set up the Three.js environment, 
+        // B: set up the Three.js environment, 
         renderCubes(trackFace, window.handsfree);
     })
 }

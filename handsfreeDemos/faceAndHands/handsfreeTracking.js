@@ -59,7 +59,7 @@ const trackFace = (handsfree, camera) => {
         y: camera.position.y, 
         z: camera.position.z
     }
-    // console.log("position original " + tween.x + ", " + tween.y + ", " +tween.z)
+    console.log("position original " + tween.x + ", " + tween.y + ", " +tween.z)
 
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
@@ -69,13 +69,14 @@ const trackFace = (handsfree, camera) => {
     // Calculate rotation - adding because we assume camera is below eye level,
     // like on a laptop
     const rot = weboji.degree
-    rot[0] += 15
+    rot[0] -= 15
 
     // Calculate new position
     const pos = {
-        x: (weboji.translation[0] -.3) * 5,
-        y: (weboji.translation[1] - .3) * 5,
-        z: (weboji.translation[2]) +  8
+        // * -1 aligns the camera with head movement
+        x: (weboji.translation[0] - .3) * -5, 
+        y: (weboji.translation[1] - .3) * -5, 
+        z: (weboji.translation[2]) + 8  
     }
 
     // Tween this values
@@ -84,14 +85,14 @@ const trackFace = (handsfree, camera) => {
         y: pos.y,
         z: pos.z
     })
-    // console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
+    console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
 
     })
 }
 
 const normalize = (original, lower, upper) => {
     // ensures that a given values falls within a specified range
-    return (original + upper - lower) 
+    return (original + upper * lower) 
 }
 
 /****** DRIVER CODE *******/

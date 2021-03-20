@@ -65,6 +65,6 @@ html, body {
 /* Visual Debugger (styles applied recursively) */
 .handsfree-debugger > * {
   position: absolute  !important;
-  height: 10rem !important;
-  width: 10rem  !important;
+  height: 12rem !important;
+  width: 12rem  !important;
 }

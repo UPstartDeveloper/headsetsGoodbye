@@ -1,25 +1,6 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 
-/* global Split - COMMENTED OUT for now 
-
-// Handling the split between the 3D objs and sidebar
-Split(['#view', '#controls'], {  // eslint-disable-line new-cap
-  sizes: [75, 25],
-  minSize: 100,
-  elementStyle: (dimension, size, gutterSize) => {
-    return {
-      'flex-basis': `calc(${size}% - ${gutterSize}px)`,
-    };
-  },
-  gutterStyle: (dimension, gutterSize) => {
-    return {
-      'flex-basis': `${gutterSize}px`,
-    };
-  },
-});
-*/
-
 // resize the canvas to prevent poor resolution
 const resizeRendererToDisplaySize = (renderer, canvas) => {
     /*

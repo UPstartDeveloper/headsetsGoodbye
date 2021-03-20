@@ -1,25 +1,6 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 
-/* global Split - COMMENTED OUT for now 
-
-// Handling the split between the 3D objs and sidebar
-Split(['#view', '#controls'], {  // eslint-disable-line new-cap
-  sizes: [75, 25],
-  minSize: 100,
-  elementStyle: (dimension, size, gutterSize) => {
-    return {
-      'flex-basis': `calc(${size}% - ${gutterSize}px)`,
-    };
-  },
-  gutterStyle: (dimension, gutterSize) => {
-    return {
-      'flex-basis': `${gutterSize}px`,
-    };
-  },
-});
-*/
-
 // resize the canvas to prevent poor resolution
 const resizeRendererToDisplaySize = (renderer, canvas) => {
     /*
@@ -80,12 +61,7 @@ const addSolidGeometry = (x, y, geometry) => {
   addObject(x, y, mesh);
 }
 
-/* rendering the scene */
-export const renderCubes = (trackingFunc, handsfreeTracker) => {
-    // A: get the canvas element (what we'll be drawing upon)
-    const canvas = document.querySelector("#c");
-    // B: instaniate the renderer (to do the drawing)
-    const renderer = new THREE.WebGLRenderer({canvas});
+export const makeCamera = () => {
     // C: instantiate the camera
     const fov = 40;  // fov = "field of view"
     const aspect = 2;  // the canvas default
@@ -94,6 +70,15 @@ export const renderCubes = (trackingFunc, handsfreeTracker) => {
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     // move the camera to look down on the box
     camera.position.z = 8;
+    return camera;
+}
+
+/* rendering the scene */
+export const renderCubes = (camera) => {
+    // A: get the canvas element (what we'll be drawing upon)
+    const canvas = document.querySelector("#c");
+    // B: instaniate the renderer (to do the drawing)
+    const renderer = new THREE.WebGLRenderer({canvas});
     // D: instantiate a scene - anything we want to draw gets added to it
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);  // black
@@ -151,8 +136,6 @@ export const renderCubes = (trackingFunc, handsfreeTracker) => {
         renderer.render(scene, camera);
         // and see the cube again in rapid succession to create movement
         requestAnimationFrame(render);
-        // let Handsfree js also manipulate the camera
-        trackingFunc(handsfreeTracker, camera);
     }
     // render the scene
     requestAnimationFrame(render);

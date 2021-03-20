@@ -1,6 +1,6 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './environments/barnyard.js';
-import { renderCubes } from './environments/cubes.js';
+import { makeCamera, renderCubes } from './environments/cubes.js';
 
 
 export function startHandsAndThree() {
@@ -44,23 +44,15 @@ export function startHandsAndThree() {
     document.addEventListener('handsfree-modelReady', () => {
         // A: make the loading element go away first
         loadingText.classList.add('disappear');
-        // B: set up the Three.js environment, 
-        renderCubes(trackFace, window.handsfree);
+        // B: plugin to add face track functionality
+        let camera = makeCamera();
+        trackFace(window.handsfree, camera);
+        // C: set up the Three.js environment, 
+        renderCubes(camera);
     })
 }
 
 const trackFace = (handsfree, camera) => {
-    // Used to hold initial position values
-    let tween = {
-        yaw: 0, 
-        pitch: 0, 
-        roll: 0, 
-        x: camera.position.x, 
-        y: camera.position.y, 
-        z: camera.position.z
-    }
-    console.log("position original " + tween.x + ", " + tween.y + ", " +tween.z)
-
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
     handsfree.use('lookHandsfree', ({weboji}) => {
@@ -85,14 +77,9 @@ const trackFace = (handsfree, camera) => {
         y: pos.y,
         z: pos.z
     })
-    console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
+    // console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
 
     })
-}
-
-const normalize = (original, lower, upper) => {
-    // ensures that a given values falls within a specified range
-    return (original + upper * lower) 
 }
 
 /****** DRIVER CODE *******/

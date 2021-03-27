@@ -4,27 +4,20 @@ import { makeCamera, renderCubes } from './environments/cubes.js';
 
 
 export function startHandsAndThree() {
-    // hide the cover card
+    // A: hide the cover card
     let card = document.getElementById("cover");
     card.classList.add('disappear');
-    // start handsfree face tracking
-    window.handsfree = new Handsfree({
-        weboji: true, 
-        showDebug: true, // TODO: resize the debug video and canvas dynamically
-        handpose: true,
-    });
-    window.handsfree.start();
-    // add the div to the DOM before Three.js is loaded, nest the canvas inside
+    // B: add a div to the DOM before Three.js is loaded, to nest the canvas inside
     let canvasParent = document.createElement("div");
     canvasParent.id = "view";
     document.body.appendChild(canvasParent); // adds to the body element
-    // make the view element at least long enough to fill the viewport
+    // C: make the view element at least long enough to fill the viewport
     canvasParent.style.minHeight = "100vh";
-    // add the canvas
+    // D: add the canvas
     let canvas = document.createElement('canvas');
     canvas.id = 'c';
     canvasParent.appendChild(canvas); // parents the canvas to the div created above
-    // add the loading screen
+    // E: add the loading screen:
     /* the structure we are making below looks like the following HTML:
      *  <div id="loading">
      *     <div> 
@@ -36,12 +29,20 @@ export function startHandsAndThree() {
     let loadingDiv = document.createElement('div');
     loadingDiv.id = 'loading'; // using the CSS to style the progress bar
     container.appendChild(loadingDiv);
-    // add the inner divs of the progress bar
+    // E: add the inner divs of the progress bar
     let innerDivOne = document.createElement('div');
     loadingDiv.appendChild(innerDivOne);
     let loadingText = document.createElement('div');
     loadingText.innerHTML = "...loading...";
     innerDivOne.appendChild(loadingText);
+    /*
+    // F: start handsfree face tracking
+    window.handsfree = new Handsfree({
+        weboji: true, 
+        showDebug: true, // TODO: resize the debug video and canvas dynamically
+        // handpose: true,
+    });
+    window.handsfree.start();
     // listen for when Handsfree is ready
     document.addEventListener('handsfree-modelReady', () => {
         // A: make the loading element go away first
@@ -52,6 +53,7 @@ export function startHandsAndThree() {
         // C: set up the Three.js environment, 
         renderCubes(camera);
     })
+    */
 }
 
 const trackFace = (handsfree, camera) => {
@@ -87,4 +89,34 @@ const trackFace = (handsfree, camera) => {
 /****** DRIVER CODE *******/
 // start the game when the user clicks "Start webcam"
 const startBtn = document.getElementById("start-button");
-startBtn.addEventListener("click", startHandsAndThree);
+//startBtn.addEventListener("click", startHandsAndThree);
+startBtn.addEventListener("click", () => {
+    window.handsfree = new Handsfree({weboji: true})
+    // Listen for the events
+    document.addEventListener('handsfree-data', (event) => {
+        const data = event.detail
+        console.log(data.weboji, data.handpose)
+    })
+    // also enable handpose
+    window.handsfree.model.handpose.enable();
+    // Start collecting da
+})
+
+
+/*
+// Instantiate
+const handsfree = new Handsfree({weboji: true, handpose: true})
+
+// Listen for the event
+document.addEventListener('handsfree-data', (event) => {
+  const data = event.detail
+  console.log(data.weboji, data.handpose)
+})
+handsfree.on('data', (event) => {
+  const data = event.detail
+  console.log(data.weboji, data.handpose)
+})
+
+// Start collecting data
+handsfree.start();
+*/

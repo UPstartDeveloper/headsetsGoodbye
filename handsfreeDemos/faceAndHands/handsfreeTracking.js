@@ -35,16 +35,16 @@ export function startHandsAndThree() {
     let loadingText = document.createElement('div');
     loadingText.innerHTML = "...loading...";
     innerDivOne.appendChild(loadingText);
-    /*
     // F: start handsfree face tracking
     window.handsfree = new Handsfree({
         weboji: true, 
         showDebug: true, // TODO: resize the debug video and canvas dynamically
         // handpose: true,
     });
+    // start hand tracking, and enable both kinds of tracking
     window.handsfree.start();
     // listen for when Handsfree is ready
-    document.addEventListener('handsfree-modelReady', () => {
+    document.addEventListener('handsfree-webojiModelReady', () => {
         // A: make the loading element go away first
         loadingText.classList.add('disappear');
         // B: plugin to add face track functionality
@@ -52,8 +52,11 @@ export function startHandsAndThree() {
         trackFace(window.handsfree, camera);
         // C: set up the Three.js environment, 
         renderCubes(camera);
+        // add hand tracking (logging to verify)
+        window.handsfree.update({hands: true})
+        console.log("Added weboji:" + window.handsfree.model.weboji);
+        console.log("Added model:" + window.handsfree.model.handpose);
     })
-    */
 }
 
 const trackFace = (handsfree, camera) => {
@@ -89,34 +92,4 @@ const trackFace = (handsfree, camera) => {
 /****** DRIVER CODE *******/
 // start the game when the user clicks "Start webcam"
 const startBtn = document.getElementById("start-button");
-//startBtn.addEventListener("click", startHandsAndThree);
-startBtn.addEventListener("click", () => {
-    window.handsfree = new Handsfree({weboji: true})
-    // Listen for the events
-    document.addEventListener('handsfree-data', (event) => {
-        const data = event.detail
-        console.log(data.weboji, data.handpose)
-    })
-    // also enable handpose
-    window.handsfree.model.handpose.enable();
-    // Start collecting da
-})
-
-
-/*
-// Instantiate
-const handsfree = new Handsfree({weboji: true, handpose: true})
-
-// Listen for the event
-document.addEventListener('handsfree-data', (event) => {
-  const data = event.detail
-  console.log(data.weboji, data.handpose)
-})
-handsfree.on('data', (event) => {
-  const data = event.detail
-  console.log(data.weboji, data.handpose)
-})
-
-// Start collecting data
-handsfree.start();
-*/
+startBtn.addEventListener("click", startHandsAndThree);

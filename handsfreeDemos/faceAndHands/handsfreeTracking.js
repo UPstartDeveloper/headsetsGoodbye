@@ -9,7 +9,9 @@ export function startHandsAndThree() {
     card.classList.add('disappear');
     // start handsfree face tracking
     window.handsfree = new Handsfree({
-        weboji: true, showDebug: true // TODO: resize the debug video dynamically
+        weboji: true, 
+        showDebug: true, // TODO: resize the debug video and canvas dynamically
+        handpose: true,
     });
     window.handsfree.start();
     // add the div to the DOM before Three.js is loaded, nest the canvas inside
@@ -66,8 +68,8 @@ const trackFace = (handsfree, camera) => {
     // Calculate new position
     const pos = {
         // * -1 aligns the camera with head movement
-        x: (weboji.translation[0] - .3) * -5, 
-        y: (weboji.translation[1] - .3) * -5, 
+        x: (weboji.translation[0] - .3) * 5, 
+        y: (weboji.translation[1] - .3) * 5, 
         z: (weboji.translation[2]) + 8  
     }
 

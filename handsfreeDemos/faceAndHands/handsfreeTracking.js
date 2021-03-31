@@ -52,10 +52,11 @@ export function startHandsAndThree() {
         trackFace(window.handsfree, camera);
         // C: set up the Three.js environment, 
         renderCubes(camera);
-        // D: add hand tracking
-        window.handsfree.update({hands: true});
+        // D: TODO: fix hand tracking integration
+        window.handsfree.update({handpose: true});
+        window.handsfree.model.handpose.enable()
         trackHand(window.handsfree);
-        // console.log("Added handpose model:" + window.handsfree.model.handpose);
+        console.log("Added handpose model:" + window.handsfree.model.handpose);
         // console.log("Added weboji:" + window.handsfree.model.weboji);
     })
 }
@@ -91,6 +92,9 @@ const trackFace = (handsfree, camera) => {
 }
 
 const trackHand = handsfree => {
+    /* The following plugin adapted from Oz Ramos' code on Glitch: 
+     * https://glitch.com/edit/#!/handsfree-jenga?path=handsfree%2FpinchClick.js%3A84%3A0 
+     */
     handsfree.use('pinchClick', {
         config: {
             // Number of pixels that the finger/thumb tips must be within to trigger a click
@@ -116,14 +120,17 @@ const trackHand = handsfree => {
          */
         onFrame({ hand }) {
             // Bail if no detection
-            if (!hand || !hand.annotations) return
+            if (!hand || !hand.annotations) {
+                console.log("No hand detected boi");
+                return
+            }
 
             // Detect if the thumb and indexFinger are pinched together
             const a = hand.annotations.indexFinger[3][0] - hand.annotations.thumb[3][0]
             const b = hand.annotations.indexFinger[3][1] - hand.annotations.thumb[3][1]
             const c = Math.sqrt(a*a + b*b)
             this.pinchThresholdMet = c < this.config.pinchDistance
-
+            console.log("Hand found!");
             // Count number of frames since last pinch to help with errors
             if (this.pinchThresholdMet) {
                 this.numErrorFrames = 0

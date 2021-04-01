@@ -54,7 +54,7 @@ export function startHandsAndThree() {
         renderCubes(camera);
         // D: TODO: fix hand tracking integration
         window.handsfree.update({handpose: true});
-        window.handsfree.model.handpose.enable()
+        // window.handsfree.model.handpose.enable(); // ---> slows the app BIG TIME
         trackHand(window.handsfree);
         console.log("Added handpose model:" + window.handsfree.model.handpose);
         // console.log("Added weboji:" + window.handsfree.model.weboji);

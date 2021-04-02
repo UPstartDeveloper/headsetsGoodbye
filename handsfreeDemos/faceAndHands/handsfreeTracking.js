@@ -49,12 +49,13 @@ export function startHandsAndThree() {
         loadingText.classList.add('disappear');
         // B: plugin to add face track functionality
         let camera = makeCamera();
-        trackFace(window.handsfree, camera);
+        // trackFace(window.handsfree, camera);
         // C: set up the Three.js environment, 
         renderCubes(camera);
         // D: turn on hand tracking
-        window.handsfree.update({handpose: true, showDebug: true});
+        window.handsfree.update({handpose: true, showDebug: true, weboji: false});
         // line below is what loads dependencies for handpose (and slows the app BIG TIME)
+        window.handsfree.model.weboji.disable();
         window.handsfree.model.handpose.enable(); 
         // TODO: fix hand tracking integration
         trackHand(window.handsfree);

@@ -37,9 +37,9 @@ export function startHandsAndThree() {
     innerDivOne.appendChild(loadingText);
     // F: start handsfree face tracking
     window.handsfree = new Handsfree({
-        weboji: true, 
+        // weboji: true, 
         showDebug: true, // TODO: resize the debug video and canvas dynamically
-        // handpose: true,
+        handpose: true,
     });
     // start hand tracking, and enable both kinds of tracking
     window.handsfree.start();
@@ -49,13 +49,20 @@ export function startHandsAndThree() {
         loadingText.classList.add('disappear');
         // B: plugin to add face track functionality
         let camera = makeCamera();
-        // trackFace(window.handsfree, camera);
+        trackFace(window.handsfree, camera);
         // C: set up the Three.js environment, 
         renderCubes(camera);
-        // D: turn on hand tracking
+        // D: turn on hand tracking model
+        window.handsfree.update({handpose: true});
+    })
+     // E: activate hand tracking feature
+     document.addEventListener('handsfree-handposeModelReady', () => {
         window.handsfree.update({handpose: true, showDebug: true, weboji: false});
+        // C: set up the Three.js environment -- TODO: REMOVE if we are doing both hand and face tracking
+        loadingText.classList.add('disappear'); // loading text disappears
+        let camera = makeCamera();
+        renderCubes(camera);
         // line below is what loads dependencies for handpose (and slows the app BIG TIME)
-        window.handsfree.model.weboji.disable();
         window.handsfree.model.handpose.enable(); 
         // TODO: fix hand tracking integration
         trackHand(window.handsfree);
@@ -97,91 +104,8 @@ const trackHand = handsfree => {
     /* The following plugin adapted from Oz Ramos' code on Glitch: 
      * https://glitch.com/edit/#!/handsfree-jenga?path=handsfree%2FpinchClick.js%3A84%3A0 
      */
-    handsfree.use('pinchClick', {
-        config: {
-            // Number of pixels that the finger/thumb tips must be within to trigger a click
-            // Too low a value will not work due to errors
-            pinchDistance: 40,
-
-            // Number of frames after a release is detected to still consider as a drag (helps with tracking errors)
-            numErrorFrames: 5
-        },
-
-        // Are the fingers pinched?
-        pinched: false,
-        // Have the fingers been released?
-        released: false,
-        // Whether the finger/thumb are considered pinched
-        pinchThresholdMet: false,
-        // Number of frames after a click is NOT detected to actually release the click (helps with errors)
-        numErrorFrames: 5,
-
-        /**
-         * Detect click state and trigger a real click event
-         * - This is the only method required for a plugin to work
-         */
-        onFrame({ handpose }) {
-            // Bail if no detection
-            if (!handpose || !handpose.annotations) {
-                console.log("No hand detected boi");
-                return
-            }
-
-            // Detect if the thumb and indexFinger are pinched together
-            const a = handpose.annotations.indexFinger[3][0] - handpose.annotations.thumb[3][0]
-            const b = handpose.annotations.indexFinger[3][1] - handpose.annotations.thumb[3][1]
-            const c = Math.sqrt(a*a + b*b)
-            this.pinchThresholdMet = c < this.config.pinchDistance
-            console.log("Hand found!");
-            // Count number of frames since last pinch to help with errors
-            if (this.pinchThresholdMet) {
-                this.numErrorFrames = 0
-            } else {
-                ++this.numErrorFrames
-            }
-
-            // Simulate a mousemove (moving the block)
-            if (this.pinched && this.numErrorFrames < this.config.numErrorFrames) {
-                handpose.pointer.state = 'mousemove'
-            }
-
-            // Simulate a mousedown (selecting a block)
-            if (this.pinchThresholdMet && !this.pinched) {
-                this.pinched = true
-                this.released = false
-                document.body.classList.add('handsfree-clicked')
-                handpose.pointer.state = 'mousedown'
-            }
-
-            // Simulate a mouseup (unpinch)
-            if (!this.pinchThresholdMet && !this.released && this.numErrorFrames < this.config.numErrorFrames) {
-                this.pinched = false
-                this.released = true
-                document.body.classList.remove('handsfree-clicked')
-                handpose.pointer.state = 'mouseup'
-            }
-
-            // Dispatch events
-            window.renderer && handpose.pointer.state && this.dispatchEvent(hand)
-        },
-
-        /**
-         * The actual click method, this is what gets throttled
-         */
-        dispatchEvent(handpose) {
-            const $el = document.elementFromPoint(handpose.pointer.x, handpose.pointer.y);
-            if ($el) {
-                window.renderer.domElement.dispatchEvent(
-                    new MouseEvent(handpose.pointer.state, {
-                        bubbles: true,
-                        cancelable: true,
-                        clientX: handpose.pointer.x,
-                        clientY: handpose.pointer.y
-                    })
-                )
-                handpose.pointer.$target = $el
-            }
-        }
+    handsfree.use('consoleLogger', (data) => {
+        console.log(data.handpose);
     })
 }
 

@@ -47,8 +47,9 @@ export function startHandsAndThree() {
     window.handsfree.model.handpose = new HandposeCPU(
         hf, hf.config.handpose
     );
-    window.handsfree.update({handpose: true});
-    // start hand tracking, and enable both kinds of tracking
+    // window.handsfree.update({handpose: true});
+    // start hand tracking,
+    window.handsfree.model.handpose.enable(); 
     window.handsfree.start();
     // listen for when Handsfree is ready
     document.addEventListener('handsfree-webojiModelReady', () => {

@@ -1,12 +1,12 @@
-import * as tf from "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core";
+
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 // import fingerpose from "https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/index.js";
 import BaseModel from "https://cdn.jsdelivr.net/gh/MIDIBlocks/handsfree/src/model/base.js";
 // imports for the fingerpose objects
-import GestureEstimator from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/GestureEstimator.js';
-import GestureDescription from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/GestureDescription.js';
-import { Finger, FingerCurl, FingerDirection } from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/FingerDescription.js';
-import * as Gestures from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/gestures';
+import GestureEstimator from './fingerpose/src/GestureEstimator.js';
+import GestureDescription from './fingerpose/src/GestureDescription.js';
+import { Finger, FingerCurl, FingerDirection } from './fingerpose/src/FingerDescription.js';
+import * as Gestures from './fingerpose/src/gestures/index.js';
 
 /* Subclassing the Handpose model so that it performs faster by using more of the CPU
  * Most of this implementation comes from the original HandposeModel:
@@ -36,7 +36,7 @@ export default class HandposeCPU extends BaseModel {
     // 8 = Index finger tip
     // 12 = Middle finger tip
     this.palmPoints = [0, 1, 2, 5, 9, 13, 17]
-    this.gestureEstimator = new fingerpose.GestureEstimator([])
+    this.gestureEstimator = new GestureEstimator([])
   }
 
   loadDependencies (callback) {
@@ -46,13 +46,15 @@ export default class HandposeCPU extends BaseModel {
           this.loadDependency(`${this.handsfree.config.assetsPath}/@tensorflow/tf-backend-${this.handsfree.config.handpose.backend}.js`, () => {
             this.loadDependency(`${this.handsfree.config.assetsPath}/@tensorflow-models/handpose/handpose.js`, () => {
               this.handsfree.getUserMedia(async () => {
-                await tf.setBackend(this.handsfree.config.handpose.backend)
+                await window.tf.setBackend(this.handsfree.config.handpose.backend)
                 this.api = await handpose.load(this.handsfree.config.handpose.model)
           
                 this.setup3D()
           
                 callback && callback(this)
                 this.dependenciesLoaded = true
+                 // Activating the CPU backend:
+                window.tf.ENV.set("WEBGL_CPU_FORWARD", true);
                 this.handsfree.emit('modelReady', this)
                 this.handsfree.emit('handposeModelReady', this)
                 document.body.classList.add('handsfree-model-handpose')
@@ -60,10 +62,8 @@ export default class HandposeCPU extends BaseModel {
             })
           })
         })
-      }, !!tf)
+      }, !!window.tf)
     }, !!THREE)
-    // Activating the CPU backend:
-    tf.ENV.set("WEBGL_CPU_FORWARD", true);
   }
 
   /**
@@ -270,28 +270,28 @@ export default class HandposeCPU extends BaseModel {
       
       // Loop through the description and compile it
       if (!this.handsfree.gesture[name].compiledDescription && this.handsfree.gesture[name].enabled) {
-        const description = new fingerpose.GestureDescription(name)
+        const description = new GestureDescription(name)
 
         this.handsfree.gesture[name].description.forEach(pose => {
           // Build the description
           switch (pose[0]) {
             case 'addCurl':
               description[pose[0]](
-                fingerpose.Finger[pose[1]],
-                fingerpose.FingerCurl[pose[2]],
+                Finger[pose[1]],
+                FingerCurl[pose[2]],
                 pose[3]
               )
             break
             case 'addDirection':
               description[pose[0]](
-                fingerpose.Finger[pose[1]],
-                fingerpose.FingerDirection[pose[2]],
+                Finger[pose[1]],
+                FingerDirection[pose[2]],
                 pose[3]
               )
             break
             case 'setWeight':
               description[pose[0]](
-                fingerpose.Finger[pose[1]],
+                Finger[pose[1]],
                 pose[2]
               )
             break
@@ -308,7 +308,7 @@ export default class HandposeCPU extends BaseModel {
     })
 
     if (activeGestures.length) {
-      this.gestureEstimator = new fingerpose.GestureEstimator(gestureDescriptions)
+      this.gestureEstimator = new GestureEstimator(gestureDescriptions)
     }
   }
   

@@ -1,6 +1,7 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './environments/barnyard.js';
 import { makeCamera, renderCubes } from './environments/cubes.js';
+import HandposeCPU from './HandposeCPU.js';
 
 
 export function startHandsAndThree() {
@@ -35,12 +36,18 @@ export function startHandsAndThree() {
     let loadingText = document.createElement('div');
     loadingText.innerHTML = "...loading...";
     innerDivOne.appendChild(loadingText);
-    // F: start handsfree face tracking
+    // F: init handsfree object  
     window.handsfree = new Handsfree({
         // weboji: true, 
         showDebug: true, // TODO: resize the debug video and canvas dynamically
-        handpose: true,
+        // handpose: true,
     });
+    // G: use the subclassed version of handpose for hand tracking
+    let hf = window.handsfree;
+    window.handsfree.model.handpose = new HandposeCPU(
+        hf, hf.config.handpose
+    );
+    window.handsfree.update({handpose: true});
     // start hand tracking, and enable both kinds of tracking
     window.handsfree.start();
     // listen for when Handsfree is ready

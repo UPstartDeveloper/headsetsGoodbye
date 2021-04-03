@@ -1,7 +1,12 @@
 import * as tf from "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core";
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
-import * as fingerpose from "https://cdn.jsdelivr.net/gh/andypotato/fingerpose/dist/fingerpose.js";
+// import fingerpose from "https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/index.js";
 import BaseModel from "https://cdn.jsdelivr.net/gh/MIDIBlocks/handsfree/src/model/base.js";
+// imports for the fingerpose objects
+import GestureEstimator from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/GestureEstimator.js';
+import GestureDescription from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/GestureDescription.js';
+import { Finger, FingerCurl, FingerDirection } from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/FingerDescription.js';
+import * as Gestures from 'https://cdn.jsdelivr.net/gh/andypotato/fingerpose/src/gestures';
 
 /* Subclassing the Handpose model so that it performs faster by using more of the CPU
  * Most of this implementation comes from the original HandposeModel:

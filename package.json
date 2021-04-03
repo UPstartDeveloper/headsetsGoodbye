@@ -18,6 +18,7 @@
   "homepage": "https://github.com/UPstartDeveloper/headsetsGoodbye#readme",
   "dependencies": {
     "@tensorflow/tfjs-backend-cpu": "^3.3.0",
+    "fingerpose": "^0.0.2",
     "handsfree": "^8.0.8"
   }
 }

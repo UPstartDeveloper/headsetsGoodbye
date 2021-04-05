@@ -1,6 +1,7 @@
 // import { Handsfree } from "https://unpkg.com/handsfree@8.4.2/build/lib/handsfree.js";
 import { setupRace } from './environments/barnyard.js';
 import { makeCamera, renderCubes } from './environments/cubes.js';
+import HandposeCPU from './HandposeCPU.js';
 
 
 export function startHandsAndThree() {
@@ -35,13 +36,20 @@ export function startHandsAndThree() {
     let loadingText = document.createElement('div');
     loadingText.innerHTML = "...loading...";
     innerDivOne.appendChild(loadingText);
-    // F: start handsfree face tracking
+    // F: init handsfree object  
     window.handsfree = new Handsfree({
-        weboji: true, 
+        // weboji: true, 
         showDebug: true, // TODO: resize the debug video and canvas dynamically
         // handpose: true,
     });
-    // start hand tracking, and enable both kinds of tracking
+    // G: use the subclassed version of handpose for hand tracking
+    let hf = window.handsfree;
+    window.handsfree.model.handpose = new HandposeCPU(
+        hf, hf.config.handpose
+    );
+    // window.handsfree.update({handpose: true});
+    // start hand tracking,
+    window.handsfree.model.handpose.enable(); 
     window.handsfree.start();
     // listen for when Handsfree is ready
     document.addEventListener('handsfree-webojiModelReady', () => {
@@ -52,10 +60,21 @@ export function startHandsAndThree() {
         trackFace(window.handsfree, camera);
         // C: set up the Three.js environment, 
         renderCubes(camera);
-        // add hand tracking (logging to verify)
-        window.handsfree.update({hands: true})
-        console.log("Added weboji:" + window.handsfree.model.weboji);
-        console.log("Added model:" + window.handsfree.model.handpose);
+        // D: turn on hand tracking model
+        window.handsfree.update({handpose: true});
+    })
+     // E: activate hand tracking feature
+     document.addEventListener('handsfree-handposeModelReady', () => {
+        window.handsfree.update({handpose: true, showDebug: true, weboji: false});
+        // C: set up the Three.js environment -- TODO: REMOVE if we are doing both hand and face tracking
+        loadingText.classList.add('disappear'); // loading text disappears
+        let camera = makeCamera();
+        renderCubes(camera);
+        // line below is what loads dependencies for handpose (and slows the app BIG TIME)
+        window.handsfree.model.handpose.enable(); 
+        // TODO: fix hand tracking integration
+        trackHand(window.handsfree);
+        console.log("Added handpose model:" + window.handsfree.model.handpose);
     })
 }
 
@@ -86,6 +105,15 @@ const trackFace = (handsfree, camera) => {
     })
     // console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
 
+    })
+}
+
+const trackHand = handsfree => {
+    /* The following plugin adapted from Oz Ramos' code on Glitch: 
+     * https://glitch.com/edit/#!/handsfree-jenga?path=handsfree%2FpinchClick.js%3A84%3A0 
+     */
+    handsfree.use('consoleLogger', (data) => {
+        console.log(data.handpose);
     })
 }
 

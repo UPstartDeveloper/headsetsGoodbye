@@ -27,7 +27,7 @@ function onResults(results) {
   if (results.multiFaceLandmarks) {
     //   console.log("Landmarks: " + results.multiFaceLandmarks[0][0].length);
     for (const landmarks of results.multiFaceLandmarks) {
-        print(JSON.stringify(landmarks));
+        console.log(JSON.stringify(FACEMESH_RIGHT_EYE));  // is a dict (JSON string)
       drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION,
                      {color: '#C0C0C070', lineWidth: 1});
       drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYE, {color: '#FF3030'});

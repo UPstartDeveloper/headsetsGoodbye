@@ -54,20 +54,43 @@ export function startHandsAndThree() {
 const trackFace = (handsfree, camera) => {
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
+    handsfree.use('logger', data => {
+      // validate that we have face data
+      if (!data.facemesh) return
+      
+      // otherwise, calculate new position for the camera
+      const pos = {
+          // * -1 aligns the camera with head movement
+          x: (data.facemesh.multiFaceLandmarks[0][0].x -.5) * -5, 
+          y: (data.facemesh.multiFaceLandmarks[0][0].y - .5) * -5, 
+          z:  8  
+      }
+
+      console.log(data.facemesh.multiFaceLandmarks[0][0]);
+
+      // Tween this values
+      TweenMax.to(camera.position, .95, {
+          x: pos.x,
+          y: pos.y,
+          z: pos.z
+      })
+    })
+
+    /*
     handsfree.use('lookHandsfree', ({facemesh}) => {
-    if (!weboji?.degree?.[0]) return
+    if (!facemesh?.degree?.[0]) return
 
     // Calculate rotation - adding because we assume camera is below eye level,
     // like on a laptop
-    const rot = weboji.degree
+    const rot = facemesh.degree
     rot[0] -= 15
 
     // Calculate new position
     const pos = {
         // * -1 aligns the camera with head movement
-        x: (weboji.translation[0] - .3) * 5, 
-        y: (weboji.translation[1] - .3) * 5, 
-        z: (weboji.translation[2]) + 8  
+        x: (facemesh.translation[0] - .3) * 5, 
+        y: (facemesh.translation[1] - .3) * 5, 
+        z: (facemesh.translation[2]) + 8  
     }
 
     // Tween this values
@@ -79,17 +102,8 @@ const trackFace = (handsfree, camera) => {
     // console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
 
     })
-}
-
-const trackHand = handsfree => {
-    /* The following plugin adapted from Oz Ramos' code on Glitch: 
-     * https://glitch.com/edit/#!/handsfree-jenga?path=handsfree%2FpinchClick.js%3A84%3A0 
-     */
-    handsfree.use('consoleLogger', (data) => {
-        console.log(data.handpose);
-    })
-}
-
+    */
+  }
 /****** DRIVER CODE *******/
 // start the game when the user clicks "Start webcam"
 const startBtn = document.getElementById("start-button");

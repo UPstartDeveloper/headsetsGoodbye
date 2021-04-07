@@ -40,16 +40,16 @@ export function startHandsAndThree() {
     window.handsfree = new Handsfree({
         // weboji: true, 
         showDebug: true, // TODO: resize the debug video and canvas dynamically
-        // handpose: true,
+        handpose: true,
     });
     // G: use the subclassed version of handpose for hand tracking
-    let hf = window.handsfree;
-    window.handsfree.model.handpose = new HandposeCPU(
-        hf, hf.config.handpose
-    );
+    // let hf = window.handsfree;
+    // window.handsfree.model.handpose = new HandposeCPU(
+    //     hf, hf.config.handpose
+    // );
     // window.handsfree.update({handpose: true});
     // start hand tracking,
-    window.handsfree.model.handpose.enable(); 
+    // window.handsfree.model.handpose.enable(); 
     window.handsfree.start();
     // listen for when Handsfree is ready
     document.addEventListener('handsfree-webojiModelReady', () => {

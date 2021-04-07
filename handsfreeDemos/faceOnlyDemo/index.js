@@ -1,106 +1,96 @@
-// Our input frames will come from here.
-const videoElement = document.getElementsByClassName('input_video')[0];
-const canvasElement = document.getElementsByClassName('output_canvas')[0];
-const controlsElement = document.getElementsByClassName('control-panel')[0];
-const canvasCtx = canvasElement.getContext('2d');
+import { makeCamera, renderCubes } from '../faceAndHands/environments/cubes.js';
 
-// We'll add this to our control panel later, but we'll save it here so we can
-// call tick() each time the graph runs.
-const fpsControl = new FPS();
 
-// Optimization: Turn off animated spinner after its hiding animation is done.
-const spinner = document.querySelector('.loading');
-spinner.ontransitionend = () => {
-  spinner.style.display = 'none';
-};
-
-function onResults(results) {
-  // Hide the spinner.
-  document.body.classList.add('loaded');
-
-  // Update the frame rate.
-  fpsControl.tick();
-
-  // Draw the overlays.
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  canvasCtx.drawImage(
-      results.image, 0, 0, canvasElement.width, canvasElement.height);
-  if (results.multiFaceLandmarks) {
-    for (const landmarks of results.multiFaceLandmarks) {
-      drawConnectors(
-          canvasCtx, landmarks, FACEMESH_TESSELATION,
-          {color: '#C0C0C070', lineWidth: 1});
-      drawConnectors(
-          canvasCtx, landmarks, FACEMESH_RIGHT_EYE,
-          {color: '#FF3030', lineWidth: 5});
-      drawConnectors(
-          canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW,
-          {color: '#FF3030', lineWidth: 5});
-      drawConnectors(
-          canvasCtx, landmarks, FACEMESH_LEFT_EYE,
-          {color: '#30FF30', lineWidth: 5});
-      drawConnectors(
-          canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW,
-          {color: '#30FF30', lineWidth: 5});
-      drawConnectors(
-          canvasCtx, landmarks, FACEMESH_FACE_OVAL,
-          {color: '#E0E0E0', lineWidth: 5});
-      drawConnectors(
-          canvasCtx, landmarks, FACEMESH_LIPS,
-          {color: '#E0E0E0', lineWidth: 5});
-    }
-  }
-  canvasCtx.restore();
+export function startHandsAndThree() {
+    // A: hide the cover card
+    let card = document.getElementById("cover");
+    card.classList.add('disappear');
+    // B: add a div to the DOM before Three.js is loaded, to nest the canvas inside
+    let canvasParent = document.createElement("div");
+    canvasParent.id = "view";
+    document.body.appendChild(canvasParent); // adds to the body element
+    // C: make the view element at least long enough to fill the viewport
+    canvasParent.style.minHeight = "100vh";
+    // D: add the canvas
+    let canvas = document.createElement('canvas');
+    canvas.id = 'c';
+    canvasParent.appendChild(canvas); // parents the canvas to the div created above
+    // E: add the loading screen:
+    /* the structure we are making below looks like the following HTML:
+     *  <div id="loading">
+     *     <div> 
+     *       <div>...loading...</div>
+     *     </div>
+     *  </div>
+     */
+    let container = document.getElementsByClassName('container')[0];
+    let loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading'; // using the CSS to style the progress bar
+    container.appendChild(loadingDiv);
+    // E: add the inner divs of the progress bar
+    let innerDivOne = document.createElement('div');
+    loadingDiv.appendChild(innerDivOne);
+    let loadingText = document.createElement('div');
+    loadingText.innerHTML = "...loading...";
+    innerDivOne.appendChild(loadingText);
+    // F: init handsfree object  
+    window.handsfree = new Handsfree({
+        facemesh: true,
+        showDebug: true, // TODO: resize the debug video and canvas dynamically
+    });
+    window.handsfree.start();
+    // G: activate face tracking
+    document.addEventListener('handsfree-facemeshModelReady', () => {
+        // A: make the loading element go away first
+        loadingText.classList.add('disappear');
+        // B: plugin to add face track functionality
+        let camera = makeCamera();
+        trackFace(window.handsfree, camera);
+        // C: set up the Three.js environment, 
+        renderCubes(camera);
+    })
 }
 
-const faceMesh = new FaceMesh({locateFile: (file) => {
-  return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/${file}`;
-}});
-faceMesh.onResults(onResults);
+const trackFace = (handsfree, camera) => {
+    // Create a new "plugin" to hook into the main loop
+    // @see https://handsfree.js.org/guide/the-loop
+    handsfree.use('lookHandsfree', ({weboji}) => {
+    if (!weboji?.degree?.[0]) return
 
-// Instantiate a camera. We'll feed each frame we receive into the solution.
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await faceMesh.send({image: videoElement});
-  },
-  width: 1280,
-  height: 720
-});
-camera.start();
+    // Calculate rotation - adding because we assume camera is below eye level,
+    // like on a laptop
+    const rot = weboji.degree
+    rot[0] -= 15
 
-// Present a control panel through which the user can manipulate the solution
-// options.
-new ControlPanel(controlsElement, {
-      selfieMode: true,
-      maxNumFaces: 1,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5
+    // Calculate new position
+    const pos = {
+        // * -1 aligns the camera with head movement
+        x: (weboji.translation[0] - .3) * 5, 
+        y: (weboji.translation[1] - .3) * 5, 
+        z: (weboji.translation[2]) + 8  
+    }
+
+    // Tween this values
+    TweenMax.to(camera.position, .95, {
+        x: pos.x,
+        y: pos.y,
+        z: pos.z
     })
-    .add([
-      new StaticText({title: 'MediaPipe Face Mesh'}),
-      fpsControl,
-      new Toggle({title: 'Selfie Mode', field: 'selfieMode'}),
-      new Slider({
-        title: 'Max Number of Faces',
-        field: 'maxNumFaces',
-        range: [1, 4],
-        step: 1
-      }),
-      new Slider({
-        title: 'Min Detection Confidence',
-        field: 'minDetectionConfidence',
-        range: [0, 1],
-        step: 0.01
-      }),
-      new Slider({
-        title: 'Min Tracking Confidence',
-        field: 'minTrackingConfidence',
-        range: [0, 1],
-        step: 0.01
-      }),
-    ])
-    .on(options => {
-      videoElement.classList.toggle('selfie', options.selfieMode);
-      faceMesh.setOptions(options);
-    });
+    // console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
+
+    })
+}
+
+const trackHand = handsfree => {
+    /* The following plugin adapted from Oz Ramos' code on Glitch: 
+     * https://glitch.com/edit/#!/handsfree-jenga?path=handsfree%2FpinchClick.js%3A84%3A0 
+     */
+    handsfree.use('consoleLogger', (data) => {
+        console.log(data.handpose);
+    })
+}
+
+/****** DRIVER CODE *******/
+// start the game when the user clicks "Start webcam"
+const startBtn = document.getElementById("start-button");
+startBtn.addEventListener("click", startHandsAndThree);

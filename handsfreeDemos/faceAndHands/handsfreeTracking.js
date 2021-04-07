@@ -42,7 +42,12 @@ export function startHandsAndThree() {
         showDebug: true, // TODO: resize the debug video and canvas dynamically
         handpose: true,
     });
-    // G: use the subclassed version of handpose for hand tracking
+    /* G: TODO: use the subclassed version of handpose for
+     * hand tracking - 
+     * or at least one that doesn't cause tremendous lagginess (unlike Handsfree.js' Handpose model)
+     * remember the CPU backend is not being used, although it might improve performace
+     * b/c it's smaller than the webgl backend
+     */
     // let hf = window.handsfree;
     // window.handsfree.model.handpose = new HandposeCPU(
     //     hf, hf.config.handpose
@@ -66,7 +71,7 @@ export function startHandsAndThree() {
      // E: activate hand tracking feature
      document.addEventListener('handsfree-handposeModelReady', () => {
         window.handsfree.update({handpose: true, showDebug: true, weboji: false});
-        // C: set up the Three.js environment -- TODO: REMOVE if we are doing both hand and face tracking
+        // C: set up the Three.js environment -- TODO: REMOVE if already done above
         loadingText.classList.add('disappear'); // loading text disappears
         let camera = makeCamera();
         renderCubes(camera);

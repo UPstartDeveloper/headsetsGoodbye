@@ -54,7 +54,7 @@ export function startHandsAndThree() {
 const trackFace = (handsfree, camera) => {
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
-    handsfree.use('lookHandsfree', ({weboji}) => {
+    handsfree.use('lookHandsfree', ({facemesh}) => {
     if (!weboji?.degree?.[0]) return
 
     // Calculate rotation - adding because we assume camera is below eye level,

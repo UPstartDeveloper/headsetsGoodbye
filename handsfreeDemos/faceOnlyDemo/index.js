@@ -62,7 +62,7 @@ const trackFace = (handsfree, camera) => {
       const pos = {
           // * -1 aligns the camera with head movement
           x: (data.facemesh.multiFaceLandmarks[0][0].x -.5) * -5, 
-          y: (data.facemesh.multiFaceLandmarks[0][0].y - .5) * -5, 
+          y: (data.facemesh.multiFaceLandmarks[0][0].y - .6) * -5, 
           z:  8  
       }
 
@@ -75,34 +75,6 @@ const trackFace = (handsfree, camera) => {
           z: pos.z
       })
     })
-
-    /*
-    handsfree.use('lookHandsfree', ({facemesh}) => {
-    if (!facemesh?.degree?.[0]) return
-
-    // Calculate rotation - adding because we assume camera is below eye level,
-    // like on a laptop
-    const rot = facemesh.degree
-    rot[0] -= 15
-
-    // Calculate new position
-    const pos = {
-        // * -1 aligns the camera with head movement
-        x: (facemesh.translation[0] - .3) * 5, 
-        y: (facemesh.translation[1] - .3) * 5, 
-        z: (facemesh.translation[2]) + 8  
-    }
-
-    // Tween this values
-    TweenMax.to(camera.position, .95, {
-        x: pos.x,
-        y: pos.y,
-        z: pos.z
-    })
-    // console.log("position new " + pos.x + ", " + pos.y + ", " + pos.z)
-
-    })
-    */
   }
 /****** DRIVER CODE *******/
 // start the game when the user clicks "Start webcam"

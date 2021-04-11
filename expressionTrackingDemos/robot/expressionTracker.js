@@ -4,20 +4,36 @@
  */
 
 import "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/dist/face-api.js";
-// import * as neuralNets from "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/weights";
 
 const startVideo = () => {
-    /* Turns on the webcam
-     * TODO: make sure to ask the user for consent!
+    /* Turns on the webcam, 
+     * then passes the video stream to the emotion tracking AI
      */
-    const constraints = { video: {} };
+    const constraints = {video: true};
     navigator.mediaDevices.getUserMedia(constraints)
     .then(videoStream => {
         trackExpressions(videoStream);
     })
     .catch(error => {
-        console.error('Error accessing media devices.', error);
+        console.error('Error accessing camera devices.', error);
     });
+}
+
+const trackExpressions = videoStream => {
+    /* Continuously animate the robot w/ expressions found on the user */
+    // 1. make a video from the web cam stream
+    console.log(videoStream)
+    const video = document.createElement('video');
+    video.srcObject = videoStream;
+    // 2. detect emotions
+    setInterval(async() => {
+        // const detections = await new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+        faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
+        .then(detections => {
+            console.log(detections);
+            // TODO: 3. animate the robot
+        });
+    }, 100);
 }
 
 // A: Load in the neural net for identifying and analyzing faces
@@ -26,24 +42,5 @@ Promise.all([
     faceapi.nets.faceLandmark68Net.loadFromUri('./weights'),
     faceapi.nets.faceRecognitionNet.loadFromUri('./weights'),
     faceapi.nets.faceExpressionNet.loadFromUri('./weights')
+// B: turn on the webcam
 ]).then(startVideo);
-
-const trackExpressions = videoStream => {
-    /* Continuously animate the robot w/ expressions found on the user */
-    // 1. make a video from the web cam stream
-    console.log(videoStream)
-    const video = document.createElement('video');
-    // video.src = videoStream.getVideoTracks()[0];
-    // video.src = videoStream;
-    // 2. detect emotions
-    setInterval(async() => {
-        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-        console.log(detections);
-        // const resizedDetections = faceapi.resizeResults(detections, displaySize)
-        // canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-        // faceapi.draw.drawDetections(canvas, resizedDetections)
-        // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-        // faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
-    }, 100);
-        // 3. play corresponding robot animations
-}

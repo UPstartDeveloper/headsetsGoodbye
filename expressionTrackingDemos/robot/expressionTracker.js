@@ -23,17 +23,18 @@ const trackExpressions = videoStream => {
     /* Continuously animate the robot w/ expressions found on the user */
     // 1. make a video from the web cam stream
     console.log(videoStream)
-    const video = document.createElement('video');
+    const video = document.getElementById('faceStream');
     video.srcObject = videoStream;
     // 2. detect emotions
-    setInterval(async() => {
-        // const detections = await new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
-        faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
-        .then(detections => {
-            console.log(detections);
+    video.addEventListener('play', () => {
+        setInterval(async() => {
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
             // TODO: 3. animate the robot
-        });
-    }, 100);
+            console.log(detections);
+        }, 100);
+    })
+    // activate the detections
+    video.play();
 }
 
 // A: Load in the neural net for identifying and analyzing faces

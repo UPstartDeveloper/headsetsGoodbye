@@ -97,3 +97,7 @@ select {
     background-color: #f00;
     padding: 10px;
 }
+
+#faceStream {
+    display: none;
+}

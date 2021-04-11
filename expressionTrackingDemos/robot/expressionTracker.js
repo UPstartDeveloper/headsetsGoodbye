@@ -28,7 +28,7 @@ const trackExpressions = videoStream => {
     // 2. detect emotions
     video.addEventListener('play', () => {
         setInterval(async() => {
-            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
             // TODO: 3. animate the robot
             console.log(detections);
         }, 100);

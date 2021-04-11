@@ -10,10 +10,14 @@
 		<title>Roberto, the iQ3 Robot</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<!-- CSS for the Robot -->
 		<link type="text/css" rel="stylesheet" href="styles.css">
+		<!-- JS needed for Expression Tracking w/ face-api.js -->
+		<script defer src="https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/dist/face-api.min.js"></script>
 	</head>
 
 	<body>
+		<!-- Information about the Three.js Scenegraph -->
 		<div id="info">
 			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - skinning and morphing<br />
 			<p>
@@ -23,8 +27,9 @@
 			<a href="https://www.patreon.com/quaternius" target="_blank" rel="noopener">Tomás Laulhé</a>,
 			modifications by <a href="https://donmccurdy.com/" target="_blank" rel="noopener">Don McCurdy</a>. CC0.<br />
 		</div>
-
+		<!-- JS for making the Robot Appear -->
 		<script src="./robot.js" type="module"></script>
-
+		<!-- JS needed for expression tracking -->
+		<script src="./expressionTracker.js" type="module"></script>
 	</body>
 </html>

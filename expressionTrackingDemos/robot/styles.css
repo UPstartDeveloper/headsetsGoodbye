@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    background-color: #000;
+    background-color: #222;
     color: #fff;
     font-family: Monospace;
     font-size: 13px;
@@ -14,7 +14,7 @@ body {
 }
 
 a {
-    color: rgb(53, 151, 203);
+    color: #2fa1d6;
     text-decoration: none;
 }
 
@@ -26,6 +26,14 @@ button {
     cursor: pointer;
     text-transform: uppercase;
 }
+
+p {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2em;
+}
+
 
 #info {
     position: absolute;

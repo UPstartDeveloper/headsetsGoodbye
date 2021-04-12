@@ -56,7 +56,6 @@ function init() {
 
         model = gltf.scene;
         scene.add( model );
-
         createGUI( model, gltf.animations );
 
     }, undefined, function ( e ) {
@@ -152,22 +151,22 @@ function createGUI( model, animations ) {
 
     emoteFolder.open();
 
-    // expressions
+    /* Expressions - THIS is what we need to control via web cam */
 
     face = model.getObjectByName( 'Head_4' );
-
+    // Lists the expression that the robot can have on the GUI panel
     const expressions = Object.keys( face.morphTargetDictionary );
     const expressionFolder = gui.addFolder( 'Expressions' );
-
+    // gives the expressions on the panel their initial values
     for ( let i = 0; i < expressions.length; i ++ ) {
-
+        // the params for the .add function: (values array, index (of values array), min, max, step_size)
         expressionFolder.add( face.morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
 
     }
-
+    // sets the robot in it's default action
     activeAction = actions[ 'Walking' ];
     activeAction.play();
-
+    // collapses the "Expressions" tab on the GUI
     expressionFolder.open();
 
 }
@@ -217,4 +216,3 @@ function animate() {
     stats.update();
 
 }
-

@@ -6,12 +6,14 @@ import { GUI } from 'https://threejsfundamentals.org/threejs/resources/threejs/r
 import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/loaders/GLTFLoader.js';
 
 let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
-let camera, scene, renderer, model;
+let camera, scene, renderer, model, face;
 
 const api = { state: 'Walking' };
 
-// init();
-// animate();
+face = init();
+// console.log(scene);
+animate();
+console.log("after init: " + typeof face);
 
 export function init() {
 
@@ -50,21 +52,27 @@ export function init() {
     scene.add( grid );
 
     // model
-
+    let faceDict = {"face": undefined};
     const loader = new GLTFLoader();
-    let face;
     loader.load( '../models/RobotExpressive.glb', function ( gltf ) {
-
+        // this happens once the robot model is loaded
         model = gltf.scene;
         scene.add( model );
         face = createGUI( model, gltf.animations );
+         // faceArray.push(face);
+         faceDict.face = face;
+         console.log("fCEARRAY " + faceDict.face );
+        console.log("after createGUI: " + face);
 
-    }, undefined, function ( e ) {
-
+    }, 
+    undefined, // this "function" happens while the loading is in progress
+    function ( e ) {
+        // this happens in case there is an error in loading the model
         console.error( e );
-
     } );
-
+    console.log("fCEARRAY " + faceDict.face );
+    // model = window.getObjectByName("Root_Scene").getObjectByName( 'Head_4' );
+    // console.log("after loader.load: " + typeof face);
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -78,7 +86,7 @@ export function init() {
     container.appendChild( stats.dom );
 
     // E: return the face - used for expression tracking
-    return face
+    // return faceArray[0];
 }
 
 function createGUI( model, animations ) {

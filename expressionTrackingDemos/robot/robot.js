@@ -6,14 +6,14 @@ import { GUI } from 'https://threejsfundamentals.org/threejs/resources/threejs/r
 import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/loaders/GLTFLoader.js';
 
 let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
-let camera, scene, renderer, model, face;
+let camera, scene, renderer, model;
 
 const api = { state: 'Walking' };
 
-init();
-animate();
+// init();
+// animate();
 
-function init() {
+export function init() {
 
     container = document.createElement( 'div' );
     document.body.appendChild( container );
@@ -52,11 +52,12 @@ function init() {
     // model
 
     const loader = new GLTFLoader();
+    let face;
     loader.load( '../models/RobotExpressive.glb', function ( gltf ) {
 
         model = gltf.scene;
         scene.add( model );
-        createGUI( model, gltf.animations );
+        face = createGUI( model, gltf.animations );
 
     }, undefined, function ( e ) {
 
@@ -76,6 +77,8 @@ function init() {
     stats = new Stats();
     container.appendChild( stats.dom );
 
+    // E: return the face - used for expression tracking
+    return face
 }
 
 function createGUI( model, animations ) {
@@ -153,7 +156,7 @@ function createGUI( model, animations ) {
 
     /* Expressions - THIS is what we need to control via web cam */
 
-    face = model.getObjectByName( 'Head_4' );
+    let face = model.getObjectByName( 'Head_4' );
     // Lists the expression that the robot can have on the GUI panel
     const expressions = Object.keys( face.morphTargetDictionary );
     const expressionFolder = gui.addFolder( 'Expressions' );
@@ -168,7 +171,8 @@ function createGUI( model, animations ) {
     activeAction.play();
     // collapses the "Expressions" tab on the GUI
     expressionFolder.open();
-
+    // RETURN THE FACE, so we can maninpulate it using the user's expression
+    return face
 }
 
 function fadeToAction( name, duration ) {
@@ -203,7 +207,7 @@ function onWindowResize() {
 
 //
 
-function animate() {
+export function animate() {
 
     const dt = clock.getDelta();
 

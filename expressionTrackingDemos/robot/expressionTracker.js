@@ -41,7 +41,7 @@ const trackExpressions = (videoStream, init, animate) => {
                 // face = model.getObjectByName( 'Head_4' );
             }
             // 4. otherwise animate the robot's angry, surprised, and sad expressions
-            else if (face) {
+            else {
                 // console.log(typeof face);
                 face.morphTargetInfluences[0] = detections[0].expressions.angry;
                 face.morphTargetInfluences[1] = detections[0].expressions.surprised;

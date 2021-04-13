@@ -10,10 +10,22 @@ let camera, scene, renderer, model, face;
 
 const api = { state: 'Walking' };
 
-face = init();
-// console.log(scene);
-animate();
-console.log("after init: " + typeof face);
+setTimeout(setFace(init, animate), 10000)
+// setFace(init);
+
+// animate();
+// console.log("after init: " + typeof face);
+
+function setFace(init, animate) {
+    // 3. Start async operation:
+    setTimeout(function() {
+        // 4. Finished async operation,
+        //    call the callback passing the result as argument
+        init();
+        console.log("One more face: " + window.face);
+        animate();
+    }, Math.random() * 2000);
+}
 
 export function init() {
 
@@ -52,17 +64,26 @@ export function init() {
     scene.add( grid );
 
     // model
-    let faceDict = {"face": undefined};
     const loader = new GLTFLoader();
-    loader.load( '../models/RobotExpressive.glb', function ( gltf ) {
+    loader.load( '../models/RobotExpressive.glb', ( gltf ) => {
         // this happens once the robot model is loaded
         model = gltf.scene;
+        // console.log("Three Scene: " + JSON.stringify(scene));
+        // console.log("GLTF Scene: " + JSON.stringify(model));
         scene.add( model );
-        face = createGUI( model, gltf.animations );
-         // faceArray.push(face);
-         faceDict.face = face;
-         console.log("fCEARRAY " + faceDict.face );
-        console.log("after createGUI: " + face);
+        // create the GUI, return a pointer to the robot's face
+        window.face = createGUI( model, gltf.animations );
+        // face.name = "robotFace";
+        // model.face = face;
+        // scene.children.push(face);
+        console.log("face inside loader.load1: " + JSON.stringify(window.face.morphTargetInfluences));
+        // console.log("face inside loader.load2: " + JSON.stringify(model.getObjectByName( 'Head_4' )));
+        // scene.add(face);
+        // place it on the DOM so we can pick it up later
+        // const temp = document.getElementById("faceObj");
+        // temp.appendChild(model);
+        // console.log("face inside loader.load: " + JSON.stringify(face));
+        // console.log(model.name)
 
     }, 
     undefined, // this "function" happens while the loading is in progress
@@ -70,8 +91,13 @@ export function init() {
         // this happens in case there is an error in loading the model
         console.error( e );
     } );
-    console.log("fCEARRAY " + faceDict.face );
-    // model = window.getObjectByName("Root_Scene").getObjectByName( 'Head_4' );
+    // console.log(scene)
+    // face = scene.traverse(e =>(e.name==='Head_4')&&(root=e));
+    setTimeout(() => {
+        console.log("face outside loader.load: " + window.face)
+    }, 1000);
+    // face = scene.getObjectByName("Root_Scene", true);
+    // console.log(face);
     // console.log("after loader.load: " + typeof face);
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -86,8 +112,12 @@ export function init() {
     container.appendChild( stats.dom );
 
     // E: return the face - used for expression tracking
-    // return faceArray[0];
+    return window.face;
 }
+
+// function setFace(face, faceDict) {
+//     faceDict["face"] = face;
+// }
 
 function createGUI( model, animations ) {
 
@@ -165,6 +195,7 @@ function createGUI( model, animations ) {
     /* Expressions - THIS is what we need to control via web cam */
 
     let face = model.getObjectByName( 'Head_4' );
+    // console.log(face.parent);
     // Lists the expression that the robot can have on the GUI panel
     const expressions = Object.keys( face.morphTargetDictionary );
     const expressionFolder = gui.addFolder( 'Expressions' );
@@ -180,6 +211,7 @@ function createGUI( model, animations ) {
     // collapses the "Expressions" tab on the GUI
     expressionFolder.open();
     // RETURN THE FACE, so we can maninpulate it using the user's expression
+    window.face = face;
     return face
 }
 

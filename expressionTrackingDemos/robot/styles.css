@@ -98,6 +98,21 @@ select {
     padding: 10px;
 }
 
-#faceStream {
-    display: none;
+/* Overlays the Video on Top of the Canvas */
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+
 }
+#faceStream {
+    z-index: 10;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-left: 0;
+    /* display: none; --> uncomment to remove the video! */
+
+}
+

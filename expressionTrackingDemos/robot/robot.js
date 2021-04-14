@@ -10,21 +10,22 @@ let camera, scene, renderer, model, face;
 
 const api = { state: 'Walking' };
 
-setTimeout(setFace(init, animate), 10000)
+console.log(setFace(init, animate));
 // setFace(init);
 
 // animate();
 // console.log("after init: " + typeof face);
 
-function setFace(init, animate) {
+async function setFace(init, animate) {
     // 3. Start async operation:
+    face = await init();
     setTimeout(function() {
         // 4. Finished async operation,
         //    call the callback passing the result as argument
-        init();
-        console.log("One more face: " + window.face);
+        console.log("One more face: " + face);
         animate();
     }, Math.random() * 2000);
+    return face;
 }
 
 export function init() {
@@ -95,6 +96,7 @@ export function init() {
     // face = scene.traverse(e =>(e.name==='Head_4')&&(root=e));
     setTimeout(() => {
         console.log("face outside loader.load: " + window.face)
+        face = window.face;
     }, 1000);
     // face = scene.getObjectByName("Root_Scene", true);
     // console.log(face);
@@ -112,7 +114,7 @@ export function init() {
     container.appendChild( stats.dom );
 
     // E: return the face - used for expression tracking
-    return window.face;
+    return face;
 }
 
 // function setFace(face, faceDict) {
@@ -126,6 +128,7 @@ function createGUI( model, animations ) {
 
     gui = new GUI();
 
+    // ANIMATING the robot
     mixer = new THREE.AnimationMixer( model );
 
     actions = {};

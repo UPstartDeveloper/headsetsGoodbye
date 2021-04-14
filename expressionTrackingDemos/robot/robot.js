@@ -73,7 +73,7 @@ export function init() {
         // console.log("GLTF Scene: " + JSON.stringify(model));
         scene.add( model );
         // create the GUI, return a pointer to the robot's face
-        window.face = createGUI( model, gltf.animations );
+        face = createGUI( model, gltf.animations );
         // face.name = "robotFace";
         // model.face = face;
         // scene.children.push(face);
@@ -95,8 +95,7 @@ export function init() {
     // console.log(scene)
     // face = scene.traverse(e =>(e.name==='Head_4')&&(root=e));
     setTimeout(() => {
-        console.log("face outside loader.load: " + window.face)
-        face = window.face;
+        console.log("face outside loader.load: " + face)
     }, 1000);
     // face = scene.getObjectByName("Root_Scene", true);
     // console.log(face);
@@ -112,9 +111,6 @@ export function init() {
     // stats
     stats = new Stats();
     container.appendChild( stats.dom );
-
-    // E: return the face - used for expression tracking
-    return face;
 }
 
 // function setFace(face, faceDict) {

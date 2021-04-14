@@ -27,25 +27,24 @@ const trackExpressions = (videoStream, init, animate) => {
     const video = document.getElementById('faceStream');
     video.srcObject = videoStream;
     // 2. detect emotions
-    let face = null;
     video.addEventListener('play', () => {
         setInterval(async() => {
             const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
             console.log(detections);
             // 3. init the face, if it hasn't already been
-            if (face === null) {
+            if (window.face === undefined) {
                 console.log("init the robot!")
-                face = init();
-                console.log(typeof face);
+                init();
+                console.log(typeof window.face);
                 animate();
                 // face = model.getObjectByName( 'Head_4' );
             }
             // 4. otherwise animate the robot's angry, surprised, and sad expressions
             else {
                 // console.log(typeof face);
-                face.morphTargetInfluences[0] = detections[0].expressions.angry;
-                face.morphTargetInfluences[1] = detections[0].expressions.surprised;
-                face.morphTargetInfluences[2] = detections[0].expressions.sad;
+                window.face.morphTargetInfluences[0] = detections[0].expressions.angry;
+                window.face.morphTargetInfluences[1] = detections[0].expressions.surprised;
+                window.face.morphTargetInfluences[2] = detections[0].expressions.sad;
             }
         }, 100);
     })

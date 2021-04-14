@@ -20,5 +20,8 @@
     "@tensorflow/tfjs-backend-cpu": "^3.3.0",
     "fingerpose": "^0.0.2",
     "handsfree": "^8.0.8"
+  },
+  "devDependencies": {
+    "face-api.js": "^0.22.2"
   }
 }

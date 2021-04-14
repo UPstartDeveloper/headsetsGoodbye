@@ -6,48 +6,50 @@
 import "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/dist/face-api.js";
 
 export function startVideo(init, animate) {
-    /* Turns on the webcam, 
-     * then passes the video stream to the emotion tracking AI
+    /* Turns on the webcam, then passes the video stream 
+     * to the emotion tracking AI.
+     * @param {function} init: this assembles the robot scene using Three.js.
+     * @param {function} animate: this enables the rendering loop for the robot.
      */
+    // A: get the webcame
     const constraints = {video: true};
     navigator.mediaDevices.getUserMedia(constraints)
+    // B: pass the video stream, as well as the robot setup functions to the AI
     .then(videoStream => {
-        // pass the video stream, as well as the robot setup functions
         trackExpressions(videoStream, init, animate);
     })
+    // C: log errors
     .catch(error => {
         console.error('Error accessing camera devices.', error);
     });
 }
 
 const trackExpressions = (videoStream, init, animate) => {
-    /* Continuously animate the robot w/ expressions found on the user */
-    // 1. make a video from the web cam stream
+    /* Continuously animate the robot w/ expressions found on the user 
+     * @param {MediaStream} videoStream: the video of the user's face
+     * @param {function} init: this assembles the robot scene using Three.js.
+     * @param {function} animate: this enables the rendering loop for the robot.
+     */
+    // A: make a video from the web cam stream
     console.log(videoStream)
     const video = document.getElementById('faceStream');
     video.srcObject = videoStream;
-    // 2. detect emotions
+    // B: detect emotions
     video.addEventListener('play', () => {
+         // C: init the face
+        init();
+        animate();
+        // D: animate the robot's angry, surprised, and sad expressions
         setInterval(async() => {
             const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-            console.log(detections);
-            // 3. init the face, if it hasn't already been
-            if (window.face === undefined) {
-                console.log("init the robot!")
-                init();
-                console.log(typeof window.face);
-                animate();
-                // face = model.getObjectByName( 'Head_4' );
-            }
-            // 4. otherwise animate the robot's angry, surprised, and sad expressions
-            else {
-                // console.log(typeof face);
+            // console.log(detections); // The models confidence in the emotions it detects
+            if (window.face !== undefined && detections.length > 0) {
                 window.face.morphTargetInfluences[0] = detections[0].expressions.angry;
                 window.face.morphTargetInfluences[1] = detections[0].expressions.surprised;
                 window.face.morphTargetInfluences[2] = detections[0].expressions.sad;
             }
         }, 100);
     })
-    // activate the detections
+    // E: activate the detections
     video.play();
 }

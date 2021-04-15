@@ -9,6 +9,7 @@ Below is a list of mini-projects that the team built as we built out the feature
 3. "Pipe Time" - [interactive object picking](https://zainraza.me/headsetsGoodbye/threejsTutorials/HelloCube/)
 4. "Inside the Cube" - [face tracking with Handsfree.js and AFrame](https://zainraza.me/headsetsGoodbye/handsfreeDemos/lookAround/index.html), based on the demo [here](https://handsfree.js.org/example/aframe/look-around-handsfree.html#adding-tweening) by [Oz Ramos](https://github.com/MIDIBlocks).
 5. "Cube Space" - [face tracking with Handsfree.js and Three.js](https://zainraza.me/headsetsGoodbye/handsfreeDemos/faceAndHands/index.html)
+6. "Roberto the Robot" - [expression tracking with face-api.js and Three.js](https://zainraza.me/headsetsGoodbye/expressionTrackingDemos/robot/index.html)
 
 ## Credits
 Much credit to [Oz Ramos](https://twitter.com/midiblocks), the creator of [Handsfree.js](https://handsfree.js.org/), since your work has also played a great role in this project!

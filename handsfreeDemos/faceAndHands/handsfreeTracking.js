@@ -39,6 +39,7 @@ export function startHandsAndThree() {
     window.handsfree = new Handsfree({
         facemesh: true,
         showDebug: true, // TODO: resize the debug video and canvas dynamically
+        handpose: true,
     });
     window.handsfree.start();
     // G: activate face tracking
@@ -50,6 +51,20 @@ export function startHandsAndThree() {
         trackFaceMesh(window.handsfree, camera);
         // C: set up the Three.js environment, 
         renderCubes(camera);
+    })
+    // H: activate hand tracking
+     document.addEventListener('handsfree-handposeModelReady', () => {
+        // window.handsfree.update({handpose: true, showDebug: true, weboji: false});
+        // C: set up the Three.js environment -- TODO: REMOVE if we are doing both hand and face tracking
+        // loadingText.classList.add('disappear'); // loading text disappears
+        // let camera = makeCamera();
+        // let camera = makeCamera();
+        // renderCubes(camera);
+        // line below is what loads dependencies for handpose (and slows the app BIG TIME)
+        // window.handsfree.model.handpose.enable(); 
+        // TODO: fix hand tracking integration
+        trackHand(window.handsfree);
+        console.log("Added handpose model:" + window.handsfree.model.handpose);
     })
 }
 

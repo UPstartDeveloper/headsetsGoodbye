@@ -219,11 +219,17 @@ async function alterExpression(video, faceapi) {
      */
     // A: detect emotions
     const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-    // B: change the robot face
+    // B: Animate the robot's expression to the mixture of anger, suprise, and sadness on the user
     if (window.face !== undefined && detections.length > 0) {
-        window.face.morphTargetInfluences[0] = detections[0].expressions.angry;
-        window.face.morphTargetInfluences[1] = detections[0].expressions.surprised;
-        window.face.morphTargetInfluences[2] = detections[0].expressions.sad;
+        // C: only change if new detections are different from existing values
+        const newEmotionValues = [
+            detections[0].expressions.angry,
+            detections[0].expressions.surprised,
+            detections[0].expressions.sad
+        ];
+        if (newEmotionValues != window.face.morphTargetInfluences) {
+            TweenMax.to(window.face.morphTargetInfluences, 0.475, newEmotionValues);
+        }
     }
     return detections;
 }
@@ -245,7 +251,8 @@ export function animate(faceapi) {
     // C: change the DOM
     requestAnimationFrame(() => {
             // include changes to the user's facial expression
-            setTimeout(alterExpression(video, faceapi), 1500);
+            // setTimeout(alterExpression(video, faceapi), 1500);
+            alterExpression(video, faceapi);
             // on to the next frame
             animate(faceapi);
         }

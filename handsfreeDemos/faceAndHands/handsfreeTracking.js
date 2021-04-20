@@ -43,11 +43,12 @@ export function startHandsAndThree() {
     });
     window.handsfree.start();
     // G: activate face tracking
+    let camera;
     document.addEventListener('handsfree-facemeshModelReady', () => {
         // A: make the loading element go away first
         loadingText.classList.add('disappear');
         // B: plugin to add face track functionality
-        let camera = makeCamera();
+        camera = makeCamera();
         trackFaceMesh(window.handsfree, camera);
         // C: set up the Three.js environment, 
         renderCubes(camera);

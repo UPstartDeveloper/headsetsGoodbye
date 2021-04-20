@@ -1,6 +1,11 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 
+function getCanvasRelativePosition(event) {
+      // TODO:
+    }
+
+
 // resize the canvas to prevent poor resolution
 const resizeRendererToDisplaySize = (renderer, canvas) => {
     /*
@@ -108,13 +113,25 @@ export const renderCubes = (camera) => {
         makeInstance(geometry, 0xaa8844, 0),
         makeInstance(geometry, 0x8844aa, 2),
     ];
-    // F: add a directional light
+    // H: listen for when the cubes are manipulated by the user's hand
+    function moveCube(event) {
+      /* Moves the selected cube to wherever the hand is located.
+       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
+       */
+      const pos = getCanvasRelativePosition(event);
+      pickPosition.x = pos.x;
+      pickPosition.y = pos.y;
+    }
+    window.addEventListener('mousemove', moveCube);
+    window.addEventListener('mouseout', clearPickPosition);
+    window.addEventListener('mouseleave', clearPickPosition);
+    // I: add a directional light
     const color = 0xFFFFFF;  // just use white light for now
     const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(-1, 2, 4);
     scene.add(light);
-    // I: now render the scene!
+    // J: now render the scene!
     const render = time => {
         // convert time to seconds
         time *= 0.001; 

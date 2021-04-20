@@ -245,7 +245,7 @@ export function animate(faceapi) {
     // C: change the DOM
     requestAnimationFrame(() => {
             // include changes to the user's facial expression
-            alterExpression(video, faceapi);
+            setTimeout(alterExpression(video, faceapi), 1500);
             // on to the next frame
             animate(faceapi);
         }

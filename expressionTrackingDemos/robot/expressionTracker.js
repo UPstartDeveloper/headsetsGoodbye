@@ -48,7 +48,7 @@ const trackExpressions = (videoStream, init, animate) => {
                 window.face.morphTargetInfluences[1] = detections[0].expressions.surprised;
                 window.face.morphTargetInfluences[2] = detections[0].expressions.sad;
             }
-        }, 100);
+        }, 70);
     })
     // E: activate the detections
     video.play();

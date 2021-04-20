@@ -211,17 +211,45 @@ function onWindowResize() {
 
 }
 
-export function animate() {
+async function alterExpression(video, faceapi) {
+    /* Moves the robot's eyes and eyebrows to mimic those of the user.
+     * @param: {HTMLVideoElement} video: this is where we retrieve the user's face.
+     * @param: {module} faceapi: this is how we'll detect emotions (using face-api.js)
+     * @return {undefined}
+     */
+    // A: detect emotions
+    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
+    // B: change the robot face
+    if (window.face !== undefined && detections.length > 0) {
+        window.face.morphTargetInfluences[0] = detections[0].expressions.angry;
+        window.face.morphTargetInfluences[1] = detections[0].expressions.surprised;
+        window.face.morphTargetInfluences[2] = detections[0].expressions.sad;
+    }
+    return detections;
+}
+
+export function animate(faceapi) {
     /* Controls the render loop of the robot, in effect
      * creating the appearance of movement on the HTML document.
+     * @param: {module} faceapi: this is how we'll detect emotions (using face-api.js)
      * @return {undefined}
      */
 
+    // A: detect user emotions
+    const video = document.getElementById('faceStream');
+    // B: Animate the Robot
     const dt = clock.getDelta();
 
     if ( mixer ) mixer.update( dt );
 
-    requestAnimationFrame( animate );
+    // C: change the DOM
+    requestAnimationFrame(() => {
+            // include changes to the user's facial expression
+            alterExpression(video, faceapi);
+            // on to the next frame
+            animate(faceapi);
+        }
+    );
 
     renderer.render( scene, camera );
 

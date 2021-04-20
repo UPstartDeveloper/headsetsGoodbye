@@ -38,17 +38,7 @@ const trackExpressions = (videoStream, init, animate) => {
     video.addEventListener('play', () => {
          // C: init the face
         init();
-        animate();
-        // D: animate the robot's angry, surprised, and sad expressions
-        setInterval(async() => {
-            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-            // console.log(detections); // The models confidence in the emotions it detects
-            if (window.face !== undefined && detections.length > 0) {
-                window.face.morphTargetInfluences[0] = detections[0].expressions.angry;
-                window.face.morphTargetInfluences[1] = detections[0].expressions.surprised;
-                window.face.morphTargetInfluences[2] = detections[0].expressions.sad;
-            }
-        }, 70);
+        animate(faceapi);
     })
     // E: activate the detections
     video.play();

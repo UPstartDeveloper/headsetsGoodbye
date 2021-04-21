@@ -1,43 +1,48 @@
-<!-- This scene originally inspired by one of the examples by Don McCurdy on the Three.js website:
-    https://github.com/mrdoob/three.js/blob/master/examples/webgl_animation_skinning_morph.html
-
-    The robot was originally created by Tomás Laulhé: https://www.patreon.com/quaternius 
--->
-
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Roberto, the iQ3 Robot</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<!-- CSS for the Robot -->
-		<link type="text/css" rel="stylesheet" href="./resources/css/styles.css">
-		<!-- Add Support for Tweening Animations -->
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Load in Bootstrap 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <!-- Add Support for Tweening Animations -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
-	</head>
-
-	<body>
-		<div class="container">
-			<!-- Information about the Three.js Scenegraph -->
-			<div id="info">
-				<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - skinning and morphing<br />
-				<p>
-					The animation system allows clips to be played individually, looped, or crossfaded with other clips. This example shows a character looping in one of several base animation states, then transitioning smoothly to one-time actions. Facial expressions are controlled independently with morph targets.
-				</p>
-				Model by
-				<a href="https://www.patreon.com/quaternius" target="_blank" rel="noopener">Tomás Laulhé</a>,
-				modifications by <a href="https://donmccurdy.com/" target="_blank" rel="noopener">Don McCurdy</a>. CC0.
-				<br/><br/>
-				<!-- Buttons to Turn On/Off Hand Tracking -->
+        <!-- CSS for the Robot -->
+		<!-- <link type="text/css" rel="stylesheet" href="./resources/css/styles.css"> -->
+       <title>Roberto, the Empathetic Robot</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+				<h1 class="row">Roberto. The Empathetic Robot.</h1>
 				<div class="row">
-					<button id="startBtn">Start Expression Tracking </button>
-					<button id="stopBtn">Stop Expression Tracking </button>
+					<div class="col-md-4">
+						<iframe src="https://giphy.com/embed/ml0LuhqGb85XOOFYv9" width="480" height="326" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/ml0LuhqGb85XOOFYv9">via GIPHY</a></p>
+					</div>
 				</div>
-			</div>
-		</div>
-		<!-- JS for Tracking the User, and Making the Robot Appear -->
-		<script src="./resources/js/index.js" type="module"></script>
-		<!-- Video Where We Capture the User's Expressions -->
-		<video id="faceStream" height="200px" width="300px"></video>
-	</body>
+				<!-- Information about the Three.js Scenegraph -->
+				<div class="row">
+					<p>
+						This animation system allows clips to be played individually, looped, or crossfaded with other clips. <br> 
+						This example shows a character looping in one of several base animation states, <br>
+						then transitioning smoothly to one-time actions. <br>
+						Facial expressions are controlled independently with morph targets, <br>
+						via the control panel or your own facial expressions in the camera.
+					</p>
+					<p>
+						Model by
+					<a href="https://www.patreon.com/quaternius" target="_blank" rel="noopener">Tomás Laulhé</a>,
+					modifications by <a href="https://donmccurdy.com/" target="_blank" rel="noopener">Don McCurdy</a>. CC0.
+					</p>
+				</div>
+				<!-- Button Turn On Hand Tracking -->
+				<div class="row mt-2">
+					<div class="col-md-4">
+						<a class="btn btn-success" id="startBtn" href="./loading.html">Start Expression Tracking </a>
+					</div>
+				</div>
+            </div>
+        </div>
+    </body>
 </html>

@@ -16,15 +16,4 @@ export const startExpressionTracking = () => {
     ]).then(startVideo(init, animate));
 }
 
-/********** TODO: STOP THE EXPRESSION TRACKING FUNCTIONALITY **************/
-export const stopExpressionTracking = () => {
-
-}
-
-
-// Attach event listeners to the buttons to call the functions above
-const startBtn = document.getElementById("startBtn");
-startBtn.addEventListener("click", startExpressionTracking);
-
-// const stopBtn = document.getElementById("stopBtn");
-// stopBtn.addEventListener("click", stopExpressionTracking);
+startExpressionTracking();

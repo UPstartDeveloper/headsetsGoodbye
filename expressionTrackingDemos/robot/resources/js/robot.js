@@ -8,7 +8,7 @@ import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/thre
 let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
 let camera, scene, renderer, model, face;
 
-const api = { state: 'Walking' };
+const api = { state: 'Standing' };
 
 export function init() {
     /* Assembles the robot on the DOM using Three.js, and adds a GUI to 

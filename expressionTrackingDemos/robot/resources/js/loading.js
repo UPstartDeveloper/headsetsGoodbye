@@ -2,10 +2,10 @@
 import { animate, init } from "./robot.js";
 // import objects needed for expression tracking
 import "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/dist/face-api.js";
-import { startVideo } from "./expressionTracker.js";
+import { startVideo } from "./scene.js";
 
 /********** STARTING THE EXPRESSION TRACKING FUNCTIONALITY **************/
-export const startExpressionTracking = () => {
+export const loadComputerVision = () => {
     // A: Load in the neural net for identifying and analyzing faces
     Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri('./weights'),
@@ -16,4 +16,4 @@ export const startExpressionTracking = () => {
     ]).then(startVideo(init, animate));
 }
 
-startExpressionTracking();
+loadComputerVision();

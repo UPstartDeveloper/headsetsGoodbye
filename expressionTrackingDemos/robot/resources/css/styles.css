@@ -97,7 +97,7 @@ select {
     padding: 10px;
 }
 
-/* Overlays the Video on Top of the Canvas */
+/* Overlays the Video and Stop Button on Top of the Canvas */
 canvas {
     position: absolute;
     top: 0;
@@ -113,5 +113,12 @@ canvas {
     margin-left: 0;
     /* display: none; --> uncomment to remove the video! */
 
+}
+#stopBtn {
+    z-index: 20;
+}
+
+.hidden {
+    display: none;
 }
 

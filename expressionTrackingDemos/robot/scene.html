@@ -20,9 +20,21 @@
 
 	<body>
 		<div class="container">
-			<!-- Buttons to Turn Off Hand Tracking -->
-				<div class="row">
-					<a href="index.html" class="btn btn-danger" id="stopBtn">Stop Expression Tracking </a>
+
+            <!-- TODO: make a better loading sign -->
+            <div id="loading" class="container">
+                <h1 class="row align-middle text-white">
+                    ...loading...
+                </h1>
+            </div>
+      
+			<!-- Button to Turn Off Hand Tracking -->
+				<div class="container" id="stopBtn">
+					<div class="row justify-content-start">
+						<div class="col-md-3">
+							<a href="index.html" class="btn btn-danger hidden">Stop Expression Tracking </a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

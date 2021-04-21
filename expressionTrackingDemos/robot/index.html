@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Load in Bootstrap 5 CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-       <title>Roberto, the Empathetic Robot</title>
+       <title>Roberto: the Empathetic Robot</title>
     </head>
     <body>
         <div class="container">
             <div class="row justify-content-center">
-				<h1 class="row">Roberto. The Empathetic Robot.</h1>
+				<h1 class="row">Roberto: The Empathetic Robot</h1>
 				<div class="row">
 					<div class="col-md-4">
 						<iframe src="https://giphy.com/embed/ml0LuhqGb85XOOFYv9" width="480" height="326" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/ml0LuhqGb85XOOFYv9">via GIPHY</a></p>
@@ -19,23 +19,38 @@
 				</div>
 				<!-- Information about the Three.js Scenegraph -->
 				<div class="row">
-					<p>
-						This animation system allows clips to be played individually, looped, or crossfaded with other clips. <br> 
-						This example shows a character looping in one of several base animation states, <br>
-						then transitioning smoothly to one-time actions. <br>
-						Facial expressions are controlled independently with morph targets, <br>
-						via the control panel or your own facial expressions in the camera.
+					<div class="col-md-10">
+						<p> 
+						<em>
+							Adapted from 
+							<a href="https://threejs.org/examples/#webgl_animation_skinning_morph">this example</a> 
+							originally found on the Three.js official website.
+						</em> 
+						<ol>
+							<li>
+								This animation system allows clips to be played individually, looped, or crossfaded with other clips. 
+							</li>
+							<li >
+								This example shows a character looping in one of several base animation states, 
+								then transitioning smoothly to one-time actions.
+							</li>
+							<li>
+								Facial expressions are controlled independently with morph targets,
+								via the control panel or your own facial expressions in the camera.
+							</li>
+						</ol> 
 					</p>
 					<p>
 						Model by
 					<a href="https://www.patreon.com/quaternius" target="_blank" rel="noopener">Tomás Laulhé</a>,
 					modifications by <a href="https://donmccurdy.com/" target="_blank" rel="noopener">Don McCurdy</a>. CC0.
 					</p>
+					</div>
 				</div>
 				<!-- Button Turn On Hand Tracking -->
 				<div class="row mt-2">
 					<div class="col-md-4">
-						<a class="btn btn-success" id="startBtn" href="./loading.html">Start Expression Tracking </a>
+						<a class="btn btn-success" id="startBtn" href="./scene.html">Start Expression Tracking </a>
 					</div>
 				</div>
             </div>

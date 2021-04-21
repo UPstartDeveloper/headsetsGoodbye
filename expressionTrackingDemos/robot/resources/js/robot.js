@@ -172,7 +172,7 @@ function createGUI( model, animations ) {
 
     }
     // sets the robot in it's default action
-    activeAction = actions[ 'Walking' ];
+    activeAction = actions[ 'Standing' ];
     activeAction.play();
     // collapses the "Expressions" tab on the GUI
     expressionFolder.open();
@@ -251,7 +251,6 @@ export function animate(faceapi) {
     // C: change the DOM
     requestAnimationFrame(() => {
             // include changes to the user's facial expression
-            // setTimeout(alterExpression(video, faceapi), 1500);
             alterExpression(video, faceapi);
             // on to the next frame
             animate(faceapi);

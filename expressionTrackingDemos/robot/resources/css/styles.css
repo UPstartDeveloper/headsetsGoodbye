@@ -106,7 +106,7 @@ canvas {
 
 }
 #faceStream {
-    z-index: 10;
+    z-index: 2;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -115,7 +115,8 @@ canvas {
 
 }
 #stopBtn {
-    z-index: 20;
+    position: absolute;
+    z-index: 2;
 }
 
 .hidden {

@@ -88,6 +88,7 @@ function createGUI( model, animations ) {
 
     const states = [ 'Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing' ];
     const emotes = [ 'Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
+    const destinations = ['Home Page']
 
     gui = new GUI();
 
@@ -175,10 +176,11 @@ function createGUI( model, animations ) {
     activeAction = actions[ 'Standing' ];
     activeAction.play();
     // collapses the "Expressions" tab on the GUI
-    expressionFolder.open();
+    // expressionFolder.open();
     // RETURN THE FACE, so we can maninpulate it using the user's expression
     window.face = face;
     return face
+    
 }
 
 function fadeToAction( name, duration ) {
@@ -228,7 +230,7 @@ async function alterExpression(video, faceapi) {
             detections[0].expressions.sad
         ];
         if (newEmotionValues != window.face.morphTargetInfluences) {
-            TweenMax.to(window.face.morphTargetInfluences, 0.475, newEmotionValues);
+            TweenMax.to(window.face.morphTargetInfluences, 0.6, newEmotionValues);
         }
     }
     return detections;

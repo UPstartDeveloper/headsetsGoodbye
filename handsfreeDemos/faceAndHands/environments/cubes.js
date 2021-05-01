@@ -122,9 +122,21 @@ export const renderCubes = (camera) => {
       pickPosition.x = pos.x;
       pickPosition.y = pos.y;
     }
+    function pickCube(event) {
+      /* "Selects" the cube that the user's pointer has chosen.
+       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
+       */
+      // TODO:
+    }
+    function dropCube(event) {
+      /* Leaves the cube wehere it is.
+       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
+       */
+      // TODO:
+    }
     window.addEventListener('mousemove', moveCube);
-    window.addEventListener('mouseout', clearPickPosition);
-    window.addEventListener('mouseleave', clearPickPosition);
+    window.addEventListener('mouseup', dropCube);
+    window.addEventListener('mousedown', pickCube);
     // I: add a directional light
     const color = 0xFFFFFF;  // just use white light for now
     const intensity = 1;

@@ -118,9 +118,7 @@ export const renderCubes = (camera) => {
       /* Moves the selected cube to wherever the hand is located.
        * @param {MouseEvent} event: contains the X and Y coordinates of the hand
        */
-      const pos = getCanvasRelativePosition(event);
-      pickPosition.x = pos.x;
-      pickPosition.y = pos.y;
+      // TODO:
     }
     function pickCube(event) {
       /* "Selects" the cube that the user's pointer has chosen.

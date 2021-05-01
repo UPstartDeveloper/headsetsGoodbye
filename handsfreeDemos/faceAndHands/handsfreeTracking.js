@@ -73,27 +73,27 @@ const trackFaceMesh = (handsfree, camera) => {
     // Create a new "plugin" to hook into the main loop
     // @see https://handsfree.js.org/guide/the-loop
     handsfree.use('logger', data => {
-      // validate that we have face data
-      if (!data.facemesh) return
+        // validate that we have face data
+        if (!data.facemesh || !data.facemesh.multiFaceLandmarks) return
       
-      // otherwise, calculate new position for the camera
-      const pos = {
-          // * -1 aligns the camera with head movement
-          x: (data.facemesh.multiFaceLandmarks[0][0].x -.5) * -5, 
-          y: (data.facemesh.multiFaceLandmarks[0][0].y - .6) * -5, 
-          z:  8  
-      }
+        // otherwise, calculate new position for the camera (1-face)
+        const pos = {
+            // * -1 aligns the camera with head movement
+            x: (data.facemesh.multiFaceLandmarks[0][0].x -.5) * -5, 
+            y: (data.facemesh.multiFaceLandmarks[0][0].y - .6) * -5, 
+            z:  8  
+        }
 
-      console.log(data.facemesh.multiFaceLandmarks[0][0]);
+        // console.log(data.facemesh.multiFaceLandmarks[0][0]);
 
-      // Tween this values
-      TweenMax.to(camera.position, .95, {
-          x: pos.x,
-          y: pos.y,
-          z: pos.z
-      })
+        // Tween this values
+        TweenMax.to(camera.position, .95, {
+            x: pos.x,
+            y: pos.y,
+            z: pos.z
+        })
     })
-  }
+}
 
 const trackFaceWeboji = (handsfree, camera) => {
     // Create a new "plugin" to hook into the main loop
@@ -200,12 +200,14 @@ const trackHand = handsfree => {
         dispatchEvent(hand) {
             const $el = document.elementFromPoint(hand.pointer.x, hand.pointer.y)
             if ($el) {
+            console.log("Cube selected: " + $el);
             window.renderer.domElement.dispatchEvent(
                 new MouseEvent(hand.pointer.state, {
-                bubbles: true,
-                cancelable: true,
-                clientX: hand.pointer.x,
-                clientY: hand.pointer.y
+                    bubbles: true,
+                    cancelable: true,
+                    clientX: hand.pointer.x,
+                    clientY: hand.pointer.y,
+                    cube: $el // the cube itself
                 })
             )
             hand.pointer.$target = $el

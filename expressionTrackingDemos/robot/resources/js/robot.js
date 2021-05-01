@@ -8,7 +8,7 @@ import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/thre
 let container, stats, clock, gui, mixer, actions, activeAction, previousAction;
 let camera, scene, renderer, model, face;
 
-const api = { state: 'Walking' };
+const api = { state: 'Standing' };
 
 export function init() {
     /* Assembles the robot on the DOM using Three.js, and adds a GUI to 
@@ -88,6 +88,7 @@ function createGUI( model, animations ) {
 
     const states = [ 'Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing' ];
     const emotes = [ 'Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
+    const destinations = ['Home Page']
 
     gui = new GUI();
 
@@ -172,13 +173,14 @@ function createGUI( model, animations ) {
 
     }
     // sets the robot in it's default action
-    activeAction = actions[ 'Walking' ];
+    activeAction = actions[ 'Standing' ];
     activeAction.play();
     // collapses the "Expressions" tab on the GUI
-    expressionFolder.open();
+    // expressionFolder.open();
     // RETURN THE FACE, so we can maninpulate it using the user's expression
     window.face = face;
     return face
+    
 }
 
 function fadeToAction( name, duration ) {
@@ -211,17 +213,51 @@ function onWindowResize() {
 
 }
 
-export function animate() {
+async function alterExpression(video, faceapi) {
+    /* Moves the robot's eyes and eyebrows to mimic those of the user.
+     * @param: {HTMLVideoElement} video: this is where we retrieve the user's face.
+     * @param: {module} faceapi: this is how we'll detect emotions (using face-api.js)
+     * @return {undefined}
+     */
+    // A: detect emotions
+    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
+    // B: Animate the robot's expression to the mixture of anger, suprise, and sadness on the user
+    if (window.face !== undefined && detections.length > 0) {
+        // C: only change if new detections are different from existing values
+        const newEmotionValues = [
+            detections[0].expressions.angry,
+            detections[0].expressions.surprised,
+            detections[0].expressions.sad
+        ];
+        if (newEmotionValues != window.face.morphTargetInfluences) {
+            TweenMax.to(window.face.morphTargetInfluences, 0.6, newEmotionValues);
+        }
+    }
+    return detections;
+}
+
+export function animate(faceapi) {
     /* Controls the render loop of the robot, in effect
      * creating the appearance of movement on the HTML document.
+     * @param: {module} faceapi: this is how we'll detect emotions (using face-api.js)
      * @return {undefined}
      */
 
+    // A: detect user emotions
+    const video = document.getElementById('faceStream');
+    // B: Animate the Robot
     const dt = clock.getDelta();
 
     if ( mixer ) mixer.update( dt );
 
-    requestAnimationFrame( animate );
+    // C: change the DOM
+    requestAnimationFrame(() => {
+            // include changes to the user's facial expression
+            alterExpression(video, faceapi);
+            // on to the next frame
+            animate(faceapi);
+        }
+    );
 
     renderer.render( scene, camera );
 

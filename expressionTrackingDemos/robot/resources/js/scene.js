@@ -3,7 +3,23 @@
  * https://www.opensourceforu.com/2020/06/building-a-facial-expression-recognition-app-using-tensorflow-js/
  */
 
+// import function for robot setup
+import { animate, init } from "./robot.js";
+// import objects needed for expression tracking
 import "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js/dist/face-api.js";
+
+
+export const loadComputerVision = () => {
+    /*  Load in the neural networks for identifying and analyzing faces. */
+    // A: Load in the neural nets
+    Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('./weights'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('./weights'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('./weights'),
+        faceapi.nets.faceExpressionNet.loadFromUri('./weights')
+    // B: turn on the webcam, and setup the robot
+    ]).then(startVideo(init, animate));
+}
 
 export function startVideo(init, animate) {
     /* Turns on the webcam, then passes the video stream 
@@ -11,7 +27,7 @@ export function startVideo(init, animate) {
      * @param {function} init: this assembles the robot scene using Three.js.
      * @param {function} animate: this enables the rendering loop for the robot.
      */
-    // A: get the webcame
+    // A: get the webcam
     const constraints = {video: true};
     navigator.mediaDevices.getUserMedia(constraints)
     // B: pass the video stream, as well as the robot setup functions to the AI
@@ -30,26 +46,31 @@ const trackExpressions = (videoStream, init, animate) => {
      * @param {function} init: this assembles the robot scene using Three.js.
      * @param {function} animate: this enables the rendering loop for the robot.
      */
-    // A: make a video from the web cam stream
+    // A: go to the make a video from the web cam stream,
     console.log(videoStream)
     const video = document.getElementById('faceStream');
     video.srcObject = videoStream;
-    // B: detect emotions
+    // B: Add the robot to the scene
+    init();
+    // C: detect emotions
     video.addEventListener('play', () => {
-         // C: init the face
-        init();
-        animate();
-        // D: animate the robot's angry, surprised, and sad expressions
-        setInterval(async() => {
-            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions();
-            // console.log(detections); // The models confidence in the emotions it detects
-            if (window.face !== undefined && detections.length > 0) {
-                window.face.morphTargetInfluences[0] = detections[0].expressions.angry;
-                window.face.morphTargetInfluences[1] = detections[0].expressions.surprised;
-                window.face.morphTargetInfluences[2] = detections[0].expressions.sad;
-            }
-        }, 100);
+         // D: Animate the robot!
+        animate(faceapi);
     })
     // E: activate the detections
     video.play();
 }
+
+
+/********** Driver code **************/
+const main = () => {
+    // A: Load in the neural networks
+    loadComputerVision();
+    // B: Remove the loading screen
+    let loadingContainer = document.getElementById("loading");
+    loadingContainer.classList.add("hidden");
+    // C: make the stop button visible
+    let stopBtnContainer = document.getElementById("stopBtn");
+    stopBtnContainer.classList.remove("hidden");
+}
+main();

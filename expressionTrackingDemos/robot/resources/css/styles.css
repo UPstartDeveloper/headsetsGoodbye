@@ -7,7 +7,6 @@ body {
     background-color: #222;
     color: #fff;
     font-family: Monospace;
-    font-size: 13px;
     line-height: 24px;
     overscroll-behavior: none;
     color:#000;
@@ -98,7 +97,7 @@ select {
     padding: 10px;
 }
 
-/* Overlays the Video on Top of the Canvas */
+/* Overlays the Video and Stop Button on Top of the Canvas */
 canvas {
     position: absolute;
     top: 0;
@@ -107,12 +106,20 @@ canvas {
 
 }
 #faceStream {
-    z-index: 10;
+    z-index: 2;
     position: absolute;
     bottom: 0;
     left: 0;
     margin-left: 0;
     /* display: none; --> uncomment to remove the video! */
 
+}
+#stopBtn {
+    position: absolute;
+    z-index: 2;
+}
+
+.hidden {
+    display: none;
 }
 

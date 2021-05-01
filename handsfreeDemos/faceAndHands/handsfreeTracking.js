@@ -156,7 +156,8 @@ const trackHand = handsfree => {
             // Bail if no detection
             if (!handpose || !handpose.annotations) return
             else {
-                console.log("Arrow? " + handpose.annotations.indexFinger);
+                // init the pointer of the handpose model
+                handpose.pointer = new Map();
                 // Detect if the thumb and indexFinger are pinched together
                 const a = handpose.annotations.indexFinger[3][0] - handpose.annotations.thumb[3][0]
                 const b = handpose.annotations.indexFinger[3][1] - handpose.annotations.thumb[3][1]
@@ -171,7 +172,7 @@ const trackHand = handsfree => {
 
                 // Simulate a mousemove (moving the block)
                 if (this.pinched && this.numErrorFrames < this.config.numErrorFrames) {
-                    handpose.pointer.state = 'mousemove'
+                    handpose.pointer.set("state",'mousemove');
                 }
 
                 // Simulate a mousedown (selecting a block)
@@ -179,7 +180,7 @@ const trackHand = handsfree => {
                     this.pinched = true
                     this.released = false
                     document.body.classList.add('handsfree-clicked')
-                    handpose.pointer.state = 'mousedown'
+                    handpose.pointer.set("state", 'mousedown');
                 }
 
                 // Simulate a mouseup (unpinch)
@@ -187,12 +188,11 @@ const trackHand = handsfree => {
                     this.pinched = false
                     this.released = true
                     document.body.classList.remove('handsfree-clicked')
-                    handpose.pointer.state = 'mouseup'
-                    console.log("Not pinching")
+                    handpose.pointer.set("state",'mouseup');
                 }
 
                 // Dispatch events
-                window.renderer && handpose.pointer.state && this.dispatchEvent(handpose)
+                window.renderer && handpose.pointer.get("state") && this.dispatchEvent(handpose)
             }
         },
 

@@ -152,65 +152,68 @@ const trackHand = handsfree => {
          * Detect click state and trigger a real click event
          * - This is the only method required for a plugin to work
          */
-        onFrame({ hand }) {
+        onFrame({ handpose }) {
             // Bail if no detection
-            if (!hand || !hand.annotations) return
+            if (!handpose || !handpose.annotations) return
+            else {
+                console.log("Arrow? " + handpose.annotations.indexFinger);
+                // Detect if the thumb and indexFinger are pinched together
+                const a = handpose.annotations.indexFinger[3][0] - handpose.annotations.thumb[3][0]
+                const b = handpose.annotations.indexFinger[3][1] - handpose.annotations.thumb[3][1]
+                const c = Math.sqrt(a*a + b*b)
+                this.pinchThresholdMet = c < this.config.pinchDistance
+                // Count number of frames since last pinch to help with errors
+                if (this.pinchThresholdMet) {
+                    this.numErrorFrames = 0
+                } else {
+                    ++this.numErrorFrames
+                }
 
-            // Detect if the thumb and indexFinger are pinched together
-            const a = hand.annotations.indexFinger[3][0] - hand.annotations.thumb[3][0]
-            const b = hand.annotations.indexFinger[3][1] - hand.annotations.thumb[3][1]
-            const c = Math.sqrt(a*a + b*b)
-            this.pinchThresholdMet = c < this.config.pinchDistance
+                // Simulate a mousemove (moving the block)
+                if (this.pinched && this.numErrorFrames < this.config.numErrorFrames) {
+                    handpose.pointer.state = 'mousemove'
+                }
 
-            // Count number of frames since last pinch to help with errors
-            if (this.pinchThresholdMet) {
-            this.numErrorFrames = 0
-            } else {
-            ++this.numErrorFrames
+                // Simulate a mousedown (selecting a block)
+                if (this.pinchThresholdMet && !this.pinched) {
+                    this.pinched = true
+                    this.released = false
+                    document.body.classList.add('handsfree-clicked')
+                    handpose.pointer.state = 'mousedown'
+                }
+
+                // Simulate a mouseup (unpinch)
+                if (!this.pinchThresholdMet && !this.released && this.numErrorFrames < this.config.numErrorFrames) {
+                    this.pinched = false
+                    this.released = true
+                    document.body.classList.remove('handsfree-clicked')
+                    handpose.pointer.state = 'mouseup'
+                    console.log("Not pinching")
+                }
+
+                // Dispatch events
+                window.renderer && handpose.pointer.state && this.dispatchEvent(handpose)
             }
-
-            // Simulate a mousemove (moving the block)
-            if (this.pinched && this.numErrorFrames < this.config.numErrorFrames) {
-            hand.pointer.state = 'mousemove'
-            }
-
-            // Simulate a mousedown (selecting a block)
-            if (this.pinchThresholdMet && !this.pinched) {
-            this.pinched = true
-            this.released = false
-            document.body.classList.add('handsfree-clicked')
-            hand.pointer.state = 'mousedown'
-            }
-
-            // Simulate a mouseup (unpinch)
-            if (!this.pinchThresholdMet && !this.released && this.numErrorFrames < this.config.numErrorFrames) {
-            this.pinched = false
-            this.released = true
-            document.body.classList.remove('handsfree-clicked')
-            hand.pointer.state = 'mouseup'
-            }
-
-            // Dispatch events
-            window.renderer && hand.pointer.state && this.dispatchEvent(hand)
         },
 
         /**
          * The actual click method, this is what gets throttled
          */
-        dispatchEvent(hand) {
-            const $el = document.elementFromPoint(hand.pointer.x, hand.pointer.y)
+        dispatchEvent(handpose) {
+            console.log("Pointer? " + handpose.pointer);
+            const $el = document.elementFromPoint(handpose.pointer.x, handpose.pointer.y)
             if ($el) {
             console.log("Cube selected: " + $el);
             window.renderer.domElement.dispatchEvent(
-                new MouseEvent(hand.pointer.state, {
+                new MouseEvent(handpose.pointer.state, {
                     bubbles: true,
                     cancelable: true,
-                    clientX: hand.pointer.x,
-                    clientY: hand.pointer.y,
+                    clientX: handpose.pointer.x,
+                    clientY: handpose.pointer.y,
                     cube: $el // the cube itself
                 })
             )
-            hand.pointer.$target = $el
+            handpose.pointer.$target = $el
             }
         }
     })

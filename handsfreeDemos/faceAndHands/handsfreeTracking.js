@@ -156,9 +156,10 @@ const trackHand = handsfree => {
             // Bail if no detection
             if (!handpose || !handpose.annotations) return
             else {
-                // init the pointer of the handpose model
+                // A: TODO: using the (x, y) coordinates of the index finger, color the point where the handpose model is right now
+                // B: init the pointer of the handpose model
                 handpose.pointer = new Map();
-                // Detect if the thumb and indexFinger are pinched together
+                // C: Detect if the thumb and indexFinger are pinched together
                 const a = handpose.annotations.indexFinger[3][0] - handpose.annotations.thumb[3][0]
                 const b = handpose.annotations.indexFinger[3][1] - handpose.annotations.thumb[3][1]
                 const c = Math.sqrt(a*a + b*b)
@@ -170,20 +171,21 @@ const trackHand = handsfree => {
                     ++this.numErrorFrames
                 }
 
-                // Simulate a mousemove (moving the block)
+                // D: Simulate a mousemove (moving the block)
                 if (this.pinched && this.numErrorFrames < this.config.numErrorFrames) {
                     handpose.pointer.set("state",'mousemove');
                 }
 
-                // Simulate a mousedown (selecting a block)
+                // E: Simulate a mousedown (selecting a block)
                 if (this.pinchThresholdMet && !this.pinched) {
                     this.pinched = true
                     this.released = false
                     document.body.classList.add('handsfree-clicked')
+                    alert("You pinched your thumb and forefinger :)");
                     handpose.pointer.set("state", 'mousedown');
                 }
 
-                // Simulate a mouseup (unpinch)
+                // F: Simulate a mouseup (unpinch)
                 if (!this.pinchThresholdMet && !this.released && this.numErrorFrames < this.config.numErrorFrames) {
                     this.pinched = false
                     this.released = true
@@ -191,7 +193,7 @@ const trackHand = handsfree => {
                     handpose.pointer.set("state",'mouseup');
                 }
 
-                // Dispatch events
+                // G: Dispatch events
                 window.renderer && handpose.pointer.get("state") && this.dispatchEvent(handpose)
             }
         },

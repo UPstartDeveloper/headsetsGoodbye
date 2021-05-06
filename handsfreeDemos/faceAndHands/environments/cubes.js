@@ -186,7 +186,8 @@ export const renderCubes = (camera) => {
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(-1, 2, 4);
     scene.add(light);
-    // J: now render the scene!
+    // J: init the picker itself, and render the scene!
+    const pickHelper = new PickHelper();
     const render = time => {
         // convert time to seconds
         time *= 0.001; 
@@ -204,6 +205,8 @@ export const renderCubes = (camera) => {
             cube.rotation.x = rot;
             cube.rotation.y = rot;
         });
+        // perform any picking needed
+        pickHelper.pick(pickPosition, scene, camera, time);
         // render the cube in one orientation
         renderer.render(scene, camera);
         // and see the cube again in rapid succession to create movement

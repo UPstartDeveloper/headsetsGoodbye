@@ -1,6 +1,10 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 
+
+// The code for picking on this page is modified from the tutorial on Object Picking on the 
+// Three.js Fundamentals page: https://threejsfundamentals.org/threejs/lessons/threejs-picking.html
+
 function getCanvasRelativePosition(event) {
       // TODO:
     }
@@ -113,28 +117,69 @@ export const renderCubes = (camera) => {
         makeInstance(geometry, 0xaa8844, 0),
         makeInstance(geometry, 0x8844aa, 2),
     ];
-    // H: listen for when the cubes are manipulated by the user's hand
-    function moveCube(event) {
-      /* Moves the selected cube to wherever the hand is located.
-       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
-       */
-      // TODO:
+    // CLASS for OBJECT-PICKING
+    class PickHelper {
+      constructor() {
+        this.raycaster = new THREE.Raycaster();
+        this.pickedObject = null;
+        this.pickedObjectSavedColor = 0;
+      }
+      pick(normalizedPosition, scene, camera, time) {
+        // restore the color if there is a picked object
+        if (this.pickedObject) {
+          this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
+          this.pickedObject = undefined;
+        }
+
+        // cast a ray through the frustum
+        this.raycaster.setFromCamera(normalizedPosition, camera);
+        // get the list of objects the ray intersected
+        const intersectedObjects = this.raycaster.intersectObjects(scene.children);
+        if (intersectedObjects.length) {
+          // pick the first object. It's the closest one
+          this.pickedObject = intersectedObjects[0].object;
+          // save its color
+          this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
+          // set the cube's emissive color to flashing red/yellow
+          this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+        }
+      }
     }
-    function pickCube(event) {
-      /* "Selects" the cube that the user's pointer has chosen.
-       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
-       */
-      // TODO:
+    // init picker's location
+    const pickPosition = {x: 0, y: 0};
+    clearPickPosition();
+    
+    // EVENT-HANDLERS - these make sure we do pick object that are actually intersected by the raycaster
+    function getCanvasRelativePosition(event) {
+      // get the bounding box of the place where the pinch happened
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * canvas.width  / rect.width,
+        y: (event.clientY - rect.top ) * canvas.height / rect.height,
+      };
     }
-    function dropCube(event) {
-      /* Leaves the cube wehere it is.
-       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
-       */
-      // TODO:
+    
+    function setPickPosition(event) {
+      const pos = getCanvasRelativePosition(event);
+      // set the raycaster's position to the place where the pinch happened
+      pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
+      pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
     }
-    window.addEventListener('mousemove', moveCube);
-    window.addEventListener('mouseup', dropCube);
-    window.addEventListener('mousedown', pickCube);
+    
+    function clearPickPosition() {
+      // unlike the mouse which always has a position
+      // if the user stops touching the screen we want
+      // to stop picking. For now we just pick a value
+      // unlikely to pick something
+      pickPosition.x = -100000;
+      pickPosition.y = -100000;
+    }
+    // TODO: add event handlers for mobile?
+    window.addEventListener('mousemove', setPickPosition);
+    window.addEventListener('mouseout', clearPickPosition);
+    window.addEventListener('mouseleave', clearPickPosition);
+
+    // BACK to setting up the scene
     // I: add a directional light
     const color = 0xFFFFFF;  // just use white light for now
     const intensity = 1;

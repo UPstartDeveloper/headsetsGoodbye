@@ -44,8 +44,6 @@ export function startHandsAndThree() {
     window.handsfree.start();
     // G: activate face tracking
     let camera;
-    camera = makeCamera();
-    renderCubes(camera);
     document.addEventListener('handsfree-facemeshModelReady', () => {
         // A: make the loading element go away first
         loadingText.classList.add('disappear');

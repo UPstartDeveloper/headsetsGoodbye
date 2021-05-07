@@ -39,11 +39,13 @@ export function startHandsAndThree() {
     window.handsfree = new Handsfree({
         facemesh: true,
         showDebug: true, // TODO: resize the debug video and canvas dynamically
-        handpose: true,
+        // handpose: true,
     });
     window.handsfree.start();
     // G: activate face tracking
     let camera;
+    camera = makeCamera();
+    renderCubes(camera);
     document.addEventListener('handsfree-facemeshModelReady', () => {
         // A: make the loading element go away first
         loadingText.classList.add('disappear');

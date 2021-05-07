@@ -145,9 +145,10 @@ export const renderCubes = (camera) => {
         }
       }
     }
-    // init picker's location
+    // init picker location and instantiate it
     const pickPosition = {x: 0, y: 0};
     clearPickPosition();
+    const pickHelper = new PickHelper();
     
     // EVENT-HANDLERS - these make sure we do pick object that are actually intersected by the raycaster
     function getCanvasRelativePosition(event) {
@@ -174,10 +175,22 @@ export const renderCubes = (camera) => {
       pickPosition.x = -100000;
       pickPosition.y = -100000;
     }
+
+    function followPickPosition(event) {
+      /** if the cube is selected, make it move along with the user's mouse */
+      if (pickHelper && pickHelper.pickedObject) {
+        // update the cube's location, making sure it doesn't go in the out of frame location
+        if (pickPosition.x !== -100000 && pickPosition.y !== -100000) {
+          pickHelper.pickedObject.position.x = pickPosition.x;
+          pickHelper.pickedObject.position.y = pickPosition.y;
+        }
+      }
+    }
     // TODO: add event handlers for mobile?
-    window.addEventListener('mousemove', setPickPosition);
-    window.addEventListener('mouseout', clearPickPosition);
-    window.addEventListener('mouseleave', clearPickPosition);
+    window.addEventListener('mousedown', setPickPosition);
+    window.addEventListener('mouseup', clearPickPosition);
+    window.addEventListener('mousemove', followPickPosition);
+    // window.addEventListener('mouseleave', clearPickPosition);
 
     // BACK to setting up the scene
     // I: add a directional light
@@ -187,7 +200,6 @@ export const renderCubes = (camera) => {
     light.position.set(-1, 2, 4);
     scene.add(light);
     // J: init the picker itself, and render the scene!
-    const pickHelper = new PickHelper();
     const render = time => {
         // convert time to seconds
         time *= 0.001; 

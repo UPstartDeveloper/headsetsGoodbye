@@ -179,12 +179,17 @@ export const renderCubes = (camera) => {
     function followPickPosition(event) {
       /** if the cube is selected, make it move along with the user's mouse */
       if (pickHelper && pickHelper.pickedObject) {
+        console.log("current pos : (" + pickHelper.pickedObject.position.x + ", " + pickHelper.pickedObject.position.y + ")");
         // tween the cube's location, making sure it doesn't go in the out of frame location
         if (pickPosition.x !== -100000 && pickPosition.y !== -100000) {
+          console.log("next pos: (" + event.x + ", " + event.y + ")");
           TweenMax.to(pickHelper.pickedObject.position, .95, {
             x: pickPosition.x,
-            y: pickPosition.y
+            y: pickPosition.y,
+            z: pickHelper.pickedObject.position.z // z coordinate stays the same
           })
+
+          console.log("new pos : (" + pickHelper.pickedObject.position.x + ", " + pickHelper.pickedObject.position.y + ")");
         }
       }
     }

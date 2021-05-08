@@ -1,6 +1,6 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
-
+import { DragControls } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/controls/DragControls.js";
 
 // The code for picking on this page is modified from the tutorial on Object Picking on the 
 // Three.js Fundamentals page: https://threejsfundamentals.org/threejs/lessons/threejs-picking.html
@@ -96,11 +96,11 @@ export const renderCubes = (camera) => {
     const boxHeight = 1;
     const boxDepth = 1;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-    /* F: 
+    const makeInstance = (geometry, color, x) => {
+      /** F: 
         * this function abstracts the steps for making a box, w/ different
         * materials and geometries
         */
-    const makeInstance = (geometry, color, x) => {
         // set color on the material (can just use CSS)
         const material = new THREE.MeshPhongMaterial({ color });
         // instantiate the box
@@ -117,6 +117,57 @@ export const renderCubes = (camera) => {
         makeInstance(geometry, 0xaa8844, 0),
         makeInstance(geometry, 0x8844aa, 2),
     ];
+    // H: make the cubes draggable
+    const controls = new DragControls(cubes, camera, renderer.domElement);
+    const raycaster = new THREE.Raycaster();  // this lets us drag individual cubes 
+    const group = new THREE.Group();  // group objects being dragged?
+		scene.add( group );
+    function onClick( event ) {
+        /** uses the raycaster to select an individual cube to drag */
+        // get the objects currently pointed at by the mouse
+				//event.preventDefault();
+        const draggableObjects = controls.getObjects();
+        draggableObjects.length = 0;
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        raycaster.setFromCamera( mouse, camera );
+        const intersections = raycaster.intersectObjects( objects, true );
+        // selects the first object being intersected by the ray
+        if ( intersections.length > 0 ) {
+          const object = intersections[0].object;
+          // extra stuff to change the object's color?
+          if ( group.children.includes( object ) === true ) {
+            object.material.emissive.set( 0x000000 );
+            scene.attach( object );
+          } else {
+            object.material.emissive.set( 0xaaaaaa );
+            group.attach( object );
+
+          }
+          controls.transformGroup = true;
+          draggableObjects.push( group );
+        }
+        if ( group.children.length === 0 ) {
+          controls.transformGroup = false;
+          draggableObjects.push( ...objects );
+        } 
+      render();
+		}
+    // controls.addEventListener( 'drag', render );
+    // document.addEventListener( 'click', onClick );
+    // I: make sure the cubes flash while being dragged
+    function startFlashing(event) {
+      /** ma */
+	    startColor = event.object.material.color.getHex();
+	    event.object.material.color.setHex(0x000000);
+    }
+
+    function endFlashing(event) {
+	    event.object.material.color.setHex(startColor);
+    }
+
+	  // controls.addEventListener( 'dragstart', startFlashing);
+	  // controls.addEventListener( 'dragend', endFlashing);
     // CLASS for OBJECT-PICKING
     // class PickHelper {
     //   constructor() {
@@ -204,7 +255,10 @@ export const renderCubes = (camera) => {
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(-1, 2, 4);
     scene.add(light);
-    // J: init the picker itself, and render the scene!
+    // J: add event-handlers to enable dragging; and render the scene!
+    const mouse = new THREE.Vector2(); // this is the pointer we'll drag objects with
+    // controls.addEventListener( 'drag', render );
+    document.addEventListener( 'click', onClick );
     const render = time => {
         // convert time to seconds
         time *= 0.001; 
@@ -229,6 +283,8 @@ export const renderCubes = (camera) => {
         // and see the cube again in rapid succession to create movement
         requestAnimationFrame(render);
     }
+    // make sure to render changes made by dragging
+    // controls.addEventListener( 'drag', render );
     // render the scene
     requestAnimationFrame(render);
 }

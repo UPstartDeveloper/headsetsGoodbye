@@ -1,5 +1,9 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
+import { DragControls } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/controls/DragControls.js";
+
+// The code for picking on this page is modified from the tutorial on Object Picking on the 
+// Three.js Fundamentals page: https://threejsfundamentals.org/threejs/lessons/threejs-picking.html
 
 function getCanvasRelativePosition(event) {
       // TODO:
@@ -92,11 +96,11 @@ export const renderCubes = (camera) => {
     const boxHeight = 1;
     const boxDepth = 1;
     const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-    /* F: 
+    const makeInstance = (geometry, color, x) => {
+      /** F: 
         * this function abstracts the steps for making a box, w/ different
         * materials and geometries
         */
-    const makeInstance = (geometry, color, x) => {
         // set color on the material (can just use CSS)
         const material = new THREE.MeshPhongMaterial({ color });
         // instantiate the box
@@ -113,35 +117,80 @@ export const renderCubes = (camera) => {
         makeInstance(geometry, 0xaa8844, 0),
         makeInstance(geometry, 0x8844aa, 2),
     ];
-    // H: listen for when the cubes are manipulated by the user's hand
-    function moveCube(event) {
-      /* Moves the selected cube to wherever the hand is located.
-       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
-       */
-      // TODO:
+    // H: make the cubes draggable
+    const controls = new DragControls(cubes, camera, renderer.domElement);
+    controls.addEventListener( 'dragstart', startFlashing );
+    document.addEventListener( 'dragend', endFlashing );
+    // I: make sure the cubes flash while being dragged via OBJECT-PICKING
+    class PickHelper {
+      constructor() {
+        this.raycaster = new THREE.Raycaster();
+        this.pickedObject = null;
+        this.pickedObjectSavedColor = 0;
+      }
+      pick(normalizedPosition, scene, camera, time) {
+        // restore the color if there is a picked object
+        if (this.pickedObject) {
+          this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
+          this.pickedObject = undefined;
+        }
+
+        // cast a ray through the frustum
+        this.raycaster.setFromCamera(normalizedPosition, camera);
+        // get the list of objects the ray intersected
+        const intersectedObjects = this.raycaster.intersectObjects(scene.children);
+        if (intersectedObjects.length) {
+          // pick the first object. It's the closest one
+          this.pickedObject = intersectedObjects[0].object;
+          // save its color
+          this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
+          // set the cube's emissive color to flashing red/yellow
+          this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+        }
+      }
     }
-    function pickCube(event) {
-      /* "Selects" the cube that the user's pointer has chosen.
-       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
-       */
-      // TODO:
+    // init picker location and instantiate it
+    const pickPosition = {x: 0, y: 0};
+    clearPickPosition();
+    const pickHelper = new PickHelper();
+    
+    // // EVENT-HANDLERS - these make sure we do pick object that are actually intersected by the raycaster
+    function getCanvasRelativePosition(event) {
+      // get the bounding box of the place where the pinch happened
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * canvas.width  / rect.width,
+        y: (event.clientY - rect.top ) * canvas.height / rect.height,
+      };
     }
-    function dropCube(event) {
-      /* Leaves the cube wehere it is.
-       * @param {MouseEvent} event: contains the X and Y coordinates of the hand
-       */
-      // TODO:
+    
+    function setPickPosition(event) {
+      const pos = getCanvasRelativePosition(event);
+      // set the raycaster's position to the place where the pinch happened
+      pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
+      pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
     }
-    window.addEventListener('mousemove', moveCube);
-    window.addEventListener('mouseup', dropCube);
-    window.addEventListener('mousedown', pickCube);
+    
+    function clearPickPosition() {
+      // For now we just pick a value
+      // unlikely to pick something - "out of frame location"
+      pickPosition.x = -100000;
+      pickPosition.y = -100000;
+    }
+
+    // TODO: add event handlers for mobile?
+    window.addEventListener('mousedown', setPickPosition);
+    window.addEventListener('mouseup', clearPickPosition);
+    // window.addEventListener('mousemove', followPickPosition);
+    // window.addEventListener('mouseleave', clearPickPosition);
+
+    // BACK to setting up the scene
     // I: add a directional light
     const color = 0xFFFFFF;  // just use white light for now
     const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(-1, 2, 4);
     scene.add(light);
-    // J: now render the scene!
     const render = time => {
         // convert time to seconds
         time *= 0.001; 
@@ -159,6 +208,8 @@ export const renderCubes = (camera) => {
             cube.rotation.x = rot;
             cube.rotation.y = rot;
         });
+        // perform any picking needed
+        pickHelper.pick(pickPosition, scene, camera, time);
         // render the cube in one orientation
         renderer.render(scene, camera);
         // and see the cube again in rapid succession to create movement

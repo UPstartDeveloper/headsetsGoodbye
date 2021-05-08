@@ -119,8 +119,8 @@ export const renderCubes = (camera) => {
     ];
     // H: make the cubes draggable
     const controls = new DragControls(cubes, camera, renderer.domElement);
-    controls.addEventListener( 'dragstart', startFlashing );
-    document.addEventListener( 'dragend', endFlashing );
+    // controls.addEventListener( 'dragstart', startFlashing );
+    // document.addEventListener( 'dragend', endFlashing );
     // I: make sure the cubes flash while being dragged via OBJECT-PICKING
     class PickHelper {
       constructor() {

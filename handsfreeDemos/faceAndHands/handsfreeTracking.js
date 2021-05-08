@@ -39,7 +39,7 @@ export function startHandsAndThree() {
     window.handsfree = new Handsfree({
         facemesh: true,
         showDebug: true, // TODO: resize the debug video and canvas dynamically
-        // handpose: true,
+        // handpose: true,  // TODO: use handpose in place of mouse when mouse-based dragging works
     });
     window.handsfree.start();
     // G: activate face tracking

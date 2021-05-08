@@ -118,85 +118,83 @@ export const renderCubes = (camera) => {
         makeInstance(geometry, 0x8844aa, 2),
     ];
     // CLASS for OBJECT-PICKING
-    class PickHelper {
-      constructor() {
-        this.raycaster = new THREE.Raycaster();
-        this.pickedObject = null;
-        this.pickedObjectSavedColor = 0;
-      }
-      pick(normalizedPosition, scene, camera, time) {
-        // restore the color if there is a picked object
-        if (this.pickedObject) {
-          this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
-          this.pickedObject = undefined;
-        }
+    // class PickHelper {
+    //   constructor() {
+    //     this.raycaster = new THREE.Raycaster();
+    //     this.pickedObject = null;
+    //     this.pickedObjectSavedColor = 0;
+    //   }
+    //   pick(normalizedPosition, scene, camera, time) {
+    //     // restore the color if there is a picked object
+    //     if (this.pickedObject) {
+    //       this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
+    //       this.pickedObject = undefined;
+    //     }
 
-        // cast a ray through the frustum
-        this.raycaster.setFromCamera(normalizedPosition, camera);
-        // get the list of objects the ray intersected
-        const intersectedObjects = this.raycaster.intersectObjects(scene.children);
-        if (intersectedObjects.length) {
-          // pick the first object. It's the closest one
-          this.pickedObject = intersectedObjects[0].object;
-          // save its color
-          this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
-          // set the cube's emissive color to flashing red/yellow
-          this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
-        }
-      }
-    }
-    // init picker location and instantiate it
-    const pickPosition = {x: 0, y: 0};
-    clearPickPosition();
-    const pickHelper = new PickHelper();
+    //     // cast a ray through the frustum
+    //     this.raycaster.setFromCamera(normalizedPosition, camera);
+    //     // get the list of objects the ray intersected
+    //     const intersectedObjects = this.raycaster.intersectObjects(scene.children);
+    //     if (intersectedObjects.length) {
+    //       // pick the first object. It's the closest one
+    //       this.pickedObject = intersectedObjects[0].object;
+    //       // save its color
+    //       this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
+    //       // set the cube's emissive color to flashing red/yellow
+    //       this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+    //     }
+    //   }
+    // }
+    // // init picker location and instantiate it
+    // const pickPosition = {x: 0, y: 0};
+    // clearPickPosition();
+    // const pickHelper = new PickHelper();
     
-    // EVENT-HANDLERS - these make sure we do pick object that are actually intersected by the raycaster
-    function getCanvasRelativePosition(event) {
-      // get the bounding box of the place where the pinch happened
-      const rect = canvas.getBoundingClientRect();
-      return {
-        x: (event.clientX - rect.left) * canvas.width  / rect.width,
-        y: (event.clientY - rect.top ) * canvas.height / rect.height,
-      };
-    }
+    // // EVENT-HANDLERS - these make sure we do pick object that are actually intersected by the raycaster
+    // function getCanvasRelativePosition(event) {
+    //   // get the bounding box of the place where the pinch happened
+    //   const rect = canvas.getBoundingClientRect();
+    //   return {
+    //     x: (event.clientX - rect.left) * canvas.width  / rect.width,
+    //     y: (event.clientY - rect.top ) * canvas.height / rect.height,
+    //   };
+    // }
     
-    function setPickPosition(event) {
-      const pos = getCanvasRelativePosition(event);
-      // set the raycaster's position to the place where the pinch happened
-      pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
-      pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
-    }
+    // function setPickPosition(event) {
+    //   const pos = getCanvasRelativePosition(event);
+    //   // set the raycaster's position to the place where the pinch happened
+    //   pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
+    //   pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
+    // }
     
-    function clearPickPosition() {
-      // unlike the mouse which always has a position
-      // if the user stops touching the screen we want
-      // to stop picking. For now we just pick a value
-      // unlikely to pick something
-      pickPosition.x = -100000;
-      pickPosition.y = -100000;
-    }
+    // function clearPickPosition() {
+    //   // For now we just pick a value
+    //   // unlikely to pick something - "out of frame location"
+    //   pickPosition.x = -100000;
+    //   pickPosition.y = -100000;
+    // }
 
-    function followPickPosition(event) {
-      /** if the cube is selected, make it move along with the user's mouse */
-      if (pickHelper && pickHelper.pickedObject) {
-        console.log("current pos : (" + pickHelper.pickedObject.position.x + ", " + pickHelper.pickedObject.position.y + ")");
-        // tween the cube's location, making sure it doesn't go in the out of frame location
-        if (pickPosition.x !== -100000 && pickPosition.y !== -100000) {
-          console.log("next pos: (" + event.x + ", " + event.y + ")");
-          TweenMax.to(pickHelper.pickedObject.position, .95, {
-            x: pickPosition.x,
-            y: pickPosition.y,
-            z: pickHelper.pickedObject.position.z // z coordinate stays the same
-          })
+    // function followPickPosition(event) {
+    //   /** if the cube is selected, make it move along with the user's mouse */
+    //   if (pickHelper && pickHelper.pickedObject) {
+    //     console.log("current pos : (" + pickHelper.pickedObject.position.x + ", " + pickHelper.pickedObject.position.y + ", " + pickHelper.pickedObject.position.z + ")");
+    //     // tween the cube's location, making sure it doesn't go in the "out of frame location"
+    //     if (pickPosition.x !== -100000 && pickPosition.y !== -100000) {
+    //       console.log("next pos: (" + pickPosition.x + ", " + pickPosition.y + ")");
+    //       TweenMax.to(pickHelper.pickedObject.position, .95, {
+    //         x: pickPosition.x,
+    //         y: pickPosition.y,
+    //         z: pickHelper.pickedObject.position.z // z coordinate stays the same
+    //       })
 
-          console.log("new pos : (" + pickHelper.pickedObject.position.x + ", " + pickHelper.pickedObject.position.y + ")");
-        }
-      }
-    }
+    //       console.log("new pos : (" + pickHelper.pickedObject.position.x + ", " + pickHelper.pickedObject.position.y + ", " + pickHelper.pickedObject.position.z + ")");
+    //     }
+    //   }
+    // }
     // TODO: add event handlers for mobile?
-    window.addEventListener('mousedown', setPickPosition);
-    window.addEventListener('mouseup', clearPickPosition);
-    window.addEventListener('mousemove', followPickPosition);
+    // window.addEventListener('mousedown', setPickPosition);
+    // window.addEventListener('mouseup', clearPickPosition);
+    // window.addEventListener('mousemove', followPickPosition);
     // window.addEventListener('mouseleave', clearPickPosition);
 
     // BACK to setting up the scene
@@ -225,7 +223,7 @@ export const renderCubes = (camera) => {
             cube.rotation.y = rot;
         });
         // perform any picking needed
-        pickHelper.pick(pickPosition, scene, camera, time);
+        // pickHelper.pick(pickPosition, scene, camera, time);
         // render the cube in one orientation
         renderer.render(scene, camera);
         // and see the cube again in rapid succession to create movement

@@ -1,6 +1,7 @@
 //import * as THREE from './node_modules/three/build/three.module.js';
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
 import { DragControls } from "https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/jsm/controls/DragControls.js";
+//import ThreeDragger from '../../../node_modules/three-dragger/dist/three-dragger.esm.js';
 
 // The code for picking on this page is modified from the tutorial on Object Picking on the 
 // Three.js Fundamentals page: https://threejsfundamentals.org/threejs/lessons/threejs-picking.html
@@ -118,7 +119,58 @@ export const renderCubes = (camera) => {
         makeInstance(geometry, 0x8844aa, 2),
     ];
     // H: make the cubes draggable
-    const controls = new DragControls(cubes, camera, renderer.domElement);
+    const addDragging = cube => {
+      //** This function is adapted from: https://javascript.info/mouse-drag-and-drop */
+      // (1) prepare to moving: make absolute and on top by z-index
+      cube.onmousedown = function(event) {
+        cube.style.position = 'absolute';
+        cube.style.zIndex = 1000;
+        // move it out of any current parents directly into body
+        // to make it positioned relative to the body
+        document.body.append(cube);
+        // disable any default dragging behaviors
+        cube.ondragstart = function() {
+          return false;
+        };
+        // centers the cube at (pageX, pageY) coordinates
+        function moveAt(pageX, pageY) {
+          cube.style.left = pageX - cube.offsetWidth / 2 + 'px';
+         cube.style.top = pageY - cube.offsetHeight / 2 + 'px';
+        }
+        // move our absolutely positioned cube under the pointer
+        moveAt(event.pageX, event.pageY);
+        function onMouseMove(event) {
+          moveAt(event.pageX, event.pageY);
+        }
+        // (2) move the cube on mousemove
+        document.addEventListener('mousemove', onMouseMove);
+        // (3) drop the cube, remove unneeded handlers
+        cube.onmouseup = function() {
+          document.removeEventListener('mousemove', onMouseMove);
+          cube.onmouseup = null;
+        };
+      };
+    }
+    cubes.forEach(addDragging);
+    /** 
+    const draggableObjects = [];
+    const controls = new DragControls(draggableObjects, camera, renderer.domElement);
+
+    controls.addEventListener('dragstart', function (data) {
+      // Remember to disable other Controls, such as OrbitControls or TrackballControls
+    });
+
+    controls.addEventListener('drag', function (data) {
+      const { target, position } = data;
+      target.position.set(position.x, position.y, position.z);
+    });
+
+    controls.addEventListener('dragend', function (data) {
+      // Remember to enable other Controls, such as OrbitControls or TrackballControls
+    });
+    */
+    // const controls = new DragControls(cubes, camera, renderer.domElement);
+    // console.log("controls added: " + JSON.stringify(controls));
     // controls.addEventListener( 'dragstart', startFlashing );
     // document.addEventListener( 'dragend', endFlashing );
     // I: make sure the cubes flash while being dragged via OBJECT-PICKING

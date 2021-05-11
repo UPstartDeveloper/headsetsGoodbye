@@ -19,9 +19,11 @@
   "dependencies": {
     "@tensorflow/tfjs-backend-cpu": "^3.3.0",
     "fingerpose": "^0.0.2",
-    "handsfree": "^8.0.8"
+    "handsfree": "^8.0.8",
+    "three-dragcontrols": "^0.88.2",
+    "three-dragger": "^1.0.2"
   },
   "devDependencies": {
-    "face-api.js": "^0.22.2"
+    "face-api.js": "^0.20.0"
   }
 }

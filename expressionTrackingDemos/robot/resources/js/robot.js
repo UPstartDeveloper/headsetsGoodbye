@@ -1,5 +1,5 @@
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/build/three.module.js';
-
+import { compareFloatsinArrays } from "./util.js";
 import Stats from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/libs/stats.module.js';
 import { GUI } from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/libs/dat.gui.module.js';
 
@@ -229,8 +229,8 @@ async function alterExpression(video, faceapi) {
             detections[0].expressions.surprised,
             detections[0].expressions.sad
         ];
-        if (newEmotionValues != window.face.morphTargetInfluences) {
-            TweenMax.to(window.face.morphTargetInfluences, 0.6, newEmotionValues);
+        if (!compareFloatsinArrays(newEmotionValues,window.face.morphTargetInfluences)) {
+            TweenMax.to(window.face.morphTargetInfluences, .82, newEmotionValues);
         }
     }
     return detections;

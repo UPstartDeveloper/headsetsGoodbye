@@ -227,7 +227,7 @@ async function alterExpression(video, faceapi) {
         const newEmotionValues = [
             detections[0].expressions.angry,
             detections[0].expressions.surprised,
-            detections[0].expressions.sad
+            detections[0].expressions.sad,
         ];
         if (!compareFloatsinArrays(newEmotionValues,window.face.morphTargetInfluences)) {
             TweenMax.to(window.face.morphTargetInfluences, .82, newEmotionValues);

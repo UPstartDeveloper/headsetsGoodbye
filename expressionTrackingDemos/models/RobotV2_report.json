@@ -1,0 +1,171 @@
+{
+    "uri": "RobotV2.glb",
+    "mimeType": "model/gltf-binary",
+    "validatorVersion": "2.0.0-dev.3.3",
+    "validatedAt": "2021-05-30T21:49:43.436Z",
+    "issues": {
+        "numErrors": 6,
+        "numWarnings": 2,
+        "numInfos": 14,
+        "numHints": 0,
+        "messages": [
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/0/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/1/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/2/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/3/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/4/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/5/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/6/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/7/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/8/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/9/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/10/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/11/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/12/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "UNUSED_OBJECT",
+                "message": "This object may be unused.",
+                "severity": 2,
+                "pointer": "/meshes/13/primitives/0/attributes/TEXCOORD_0"
+            },
+            {
+                "code": "NODE_SKINNED_MESH_NON_ROOT",
+                "message": "Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh.",
+                "severity": 1,
+                "pointer": "/nodes/55"
+            },
+            {
+                "code": "NODE_SKINNED_MESH_NON_ROOT",
+                "message": "Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh.",
+                "severity": 1,
+                "pointer": "/nodes/56"
+            },
+            {
+                "code": "ACCESSOR_VECTOR3_NON_UNIT",
+                "message": "Vector3 at accessor indices 102..104 is not of unit length: 0.",
+                "severity": 0,
+                "pointer": "/meshes/1/primitives/0/attributes/NORMAL"
+            },
+            {
+                "code": "ACCESSOR_VECTOR3_NON_UNIT",
+                "message": "Vector3 at accessor indices 105..107 is not of unit length: 0.",
+                "severity": 0,
+                "pointer": "/meshes/1/primitives/0/attributes/NORMAL"
+            },
+            {
+                "code": "ACCESSOR_VECTOR3_NON_UNIT",
+                "message": "Vector3 at accessor indices 108..110 is not of unit length: 0.",
+                "severity": 0,
+                "pointer": "/meshes/1/primitives/0/attributes/NORMAL"
+            },
+            {
+                "code": "ACCESSOR_VECTOR3_NON_UNIT",
+                "message": "Vector3 at accessor indices 102..104 is not of unit length: 0.",
+                "severity": 0,
+                "pointer": "/meshes/12/primitives/0/attributes/NORMAL"
+            },
+            {
+                "code": "ACCESSOR_VECTOR3_NON_UNIT",
+                "message": "Vector3 at accessor indices 105..107 is not of unit length: 0.",
+                "severity": 0,
+                "pointer": "/meshes/12/primitives/0/attributes/NORMAL"
+            },
+            {
+                "code": "ACCESSOR_VECTOR3_NON_UNIT",
+                "message": "Vector3 at accessor indices 108..110 is not of unit length: 0.",
+                "severity": 0,
+                "pointer": "/meshes/12/primitives/0/attributes/NORMAL"
+            }
+        ],
+        "truncated": false
+    },
+    "info": {
+        "version": "2.0",
+        "generator": "Khronos glTF Blender I/O v1.1.45",
+        "resources": [
+            {
+                "pointer": "/buffers/0",
+                "mimeType": "application/gltf-buffer",
+                "storage": "glb",
+                "byteLength": 1422756
+            }
+        ],
+        "animationCount": 15,
+        "materialCount": 1,
+        "hasMorphTargets": true,
+        "hasSkins": true,
+        "hasTextures": false,
+        "hasDefaultScene": true,
+        "drawCallCount": 14,
+        "totalVertexCount": 7214,
+        "totalTriangleCount": 3248,
+        "maxUVs": 1,
+        "maxInfluences": 4,
+        "maxAttributes": 5
+    }
+}
